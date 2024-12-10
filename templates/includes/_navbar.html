@@ -1,0 +1,104 @@
+<nav class="navbar navbar-expand-lg custom-navbar">
+    <a class="navbar-brand" href="{%  url 'home' %}">HappyDriver</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+
+            <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+               data-bs-toggle="dropdown" aria-expanded="false">
+                Теорія ПДР
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a class="dropdown-item" href="">Правила дорожнього руху</a></li>
+                <li><a class="dropdown-item" href="">Дорожні знаки</a></li>
+                <li><a class="dropdown-item" href="">Дорожня розмітка</a></li>
+                <li><a class="dropdown-item" href="">Світлофор</a></li>
+                <li><a class="dropdown-item" href="">Регулювальник</a></li>
+                <li><a class="dropdown-item" href="">Штрафи</a></li>
+            </ul>
+            </li>
+
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                   data-bs-toggle="dropdown" aria-expanded="false">
+                    Тести ПДР
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <li><a class="dropdown-item" href="{% url 'get_topic_quizzes' %}">Тести по темам</a></li>
+                    <li><a class="dropdown-item" href="{% url 'choose_quiz_category' %}">Тести по категоріях прав</a></li>
+                    <li><a class="dropdown-item" href="{% url 'get_paper_quizzes' %}">Тести по білетах</a></li>
+                </ul>
+                </li>
+
+            <li class="nav-item"><a class="nav-link" href="/#contacts">Контакти</a></li>
+
+            {% if request.user.is_authenticated %}
+                <li class="nav-item"><a class="nav-link">|</a></li>
+
+                {% if request.user.is_staff %}
+
+                <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle profile" href="#" id="navbarDropdown5" role="button"
+                   data-bs-toggle="dropdown" aria-expanded="false">
+                    Налаштування тестів
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <li><a class="dropdown-item" href="">Створити тест</a></li>
+                    <li><a class="dropdown-item" href="">Релагувати тест</a></li>
+                    <li><a class="dropdown-item" href="">Видалити тест</a></li>
+                </ul>
+                </li>
+
+                <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle profile" href="#" id="navbarDropdown4" role="button"
+                   data-bs-toggle="dropdown" aria-expanded="false">
+                    Користувачі
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <li><a class="dropdown-item" href="">Додати помічника</a></li>
+                    <li><a class="dropdown-item" href="">Список користувачів</a></li>
+                </ul>
+                </li>
+
+                {% else %}
+                <li class="nav-item">
+                    <a class="nav-link profile"
+                       href="">Історія проходжень</a>
+                </li>
+                {% endif %}
+            {% endif %}
+        </ul>
+
+        {% if request.user.is_authenticated %}
+        <span>
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle profile" href="#" id="navbarDropdown7" role="button"
+                   data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="bi bi-person-circle"></i>Профіль
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <li><a class="dropdown-item" href="{% url 'edit_user' %}">Редагувати профіль</a></li>
+                    <li><a class="dropdown-item" href="{% url 'delete_user' request.user.pk %}" >Видалити профіль</a></li>
+                </ul>
+            </li>
+
+            <li class="nav-item">
+                <a href="{% url 'signout' %}" class="btn btn-outline-danger">Вихід</a>
+            </li>
+        </ul>
+
+        {% else %}
+        <span>
+            <a href="{% url 'signin' %}" class="btn btn-danger">Вхід</a>
+            <a href="{% url 'signup' %}" class="btn btn-outline-danger">Реєстрація</a>
+        </span>
+        {% endif %}
+
+    </div>
+</nav>

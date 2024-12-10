@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block title %}
+{{ title }} :: {{ block.super }}
+{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="text-center mb-4">{{ title }}</h2>
+
+    <div class="row">
+        {% for quiz in quizzes %}
+        <div class="col-md-4 mb-4">
+            <div class="card shadow-sm">
+                <img src="{% if quiz.image %}{{ quiz.image.url }}{% else %}https://via.placeholder.com/300x200{% endif %}" class="card-img-top" alt="{{ quiz.title }}">
+                <div class="card-body">
+                    <h5 class="card-title">{{ quiz.title }}</h5>
+                    <p class="card-text">Категорія прав: {{ quiz.get_category_display }}</p>
+                    <button type="submit" class="auth-btn">Пройти тестування</button>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <p class="text-center">Тести не знайдені.</p>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

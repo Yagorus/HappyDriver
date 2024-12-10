@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+{{ title }} :: {{ block.super }}
+{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="text-center mb-4">{{ title }}</h2>
+
+    <div class="row justify-content-center mt-5">
+  
+      <div class="col-md-4 mb-4">
+        <a href="{% url 'get_paper_quizzes' %}" class="no-outline">
+            <div class="card p-4 card-min-height text-center">
+                <h3 class="text-center">Тести ПДР по білетах</h3>
+                <div class="d-flex justify-content-center align-items-center">
+                  <img src="{% static 'img/test_1.svg' %}" style="width: 90px; height: 100px;">
+                </div>
+            </div>
+        </a>
+      </div>
+  
+      <div class="col-md-4 mb-4">
+        <a href="{% url 'get_topic_quizzes' %}" class="no-outline">
+        <div class="card p-4 card-min-height">
+          <h3 class="text-center">Тести ПДР по темах</h3>
+          <div class="d-flex justify-content-center align-items-center">
+            <img src="{% static 'img/test_2.svg' %}" style="width: 90px; height: 100px;">
+          </div>
+        </div>
+        </a>
+      </div>        
+  
+      <div class="col-md-4 mb-4">
+        <div class="card p-4 card-min-height">
+            <h3 class="text-center">Тести ПДР по категоріях прав</h3>
+            <div class="d-flex justify-content-center align-items-center">
+                <div class="i_category_select d-flex align-items-center gap-3">
+                    <div class="i_category_title">Обрати категорію:</div>
+                    <select id="i_category">
+                        <option value="A">A</option>
+                        <option value="B">B</option>
+                        <option value="C">C</option>
+                        <option value="D">D</option>
+                        <option value="E">E</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+      </div>  
+  
+    </div>
+
+</div>
+
+{% endblock %}
+{% block scripts %} 
+<script>
+    document.getElementById('i_category').addEventListener('change', function() {
+        var category = this.value;
+        var url = '{% url "get_category_quizzes" "CATEGORY" %}'.replace('CATEGORY', category);
+        window.location.href = url;
+    });
+</script>
+{% endblock %}

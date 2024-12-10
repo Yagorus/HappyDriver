@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+{{ title }} :: {{ block.super }}
+{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="text-center mb-4">{{ title }}</h2>
+
+    <div class="row justify-content-center mt-5">
+  
+        <ul class="category_program_navs">
+
+            <li class="category_program_nav">
+                <a class="dropdown-item" href="{% url 'get_category_quizzes' 'A' %}">
+                    <div class="category_sh">
+                        <span class="category_s">A</span>
+                        <span class="category_h">Категорія</span>
+                    </div>
+                    <div class="category_d">Мотоцикли</div>
+                </a>
+            </li>
+          
+            <li class="category_program_nav">
+                <a class="dropdown-item" href="{% url 'get_category_quizzes' 'B' %}">
+                <div class="category_sh">
+                    <span class="category_s">B</span>
+                    <span class="category_h">Категорія</span>
+                </div>
+                <div class="category_d">Легкові автомобілі</div>
+                </a>
+            </li>
+          
+            <li class="category_program_nav">
+                <a class="dropdown-item" href="{% url 'get_category_quizzes' 'C' %}">
+                <div class="category_sh">
+                    <span class="category_s">C</span>
+                    <span class="category_h">Категорія</span>
+                </div>
+                <div class="category_d">Вантажні автомобілі</div>
+                </a>
+            </li>
+          
+            <li class="category_program_nav">
+                <a class="dropdown-item" href="{% url 'get_category_quizzes' 'D' %}">
+                <div class="category_sh">
+                    <span class="category_s">D</span>
+                    <span class="category_h">Категорія</span>
+                </div>
+                <div class="category_d">Автобуси</div>
+                </a>
+            </li>
+          
+            <li class="category_program_nav">
+                <a class="dropdown-item" href="{% url 'get_category_quizzes' 'E' %}">
+                <div class="category_sh">
+                    <span class="category_s">E</span>
+                    <span class="category_h">Категорія</span>
+                </div>
+                <div class="category_d">Причепи</div>
+                </a>
+            </li>
+          </ul>
+          
+          
+    </div>
+
+</div>
+
+{% endblock %}
+{% block scripts %} 
+
+{% endblock %}
