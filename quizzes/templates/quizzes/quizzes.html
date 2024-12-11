@@ -11,12 +11,13 @@
     <div class="row">
         {% for quiz in quizzes %}
         <div class="col-md-4 mb-4">
-            <div class="card shadow-sm">
-                <img src="{% if quiz.image %}{{ quiz.image.url }}{% else %}https://via.placeholder.com/300x200{% endif %}" class="card-img-top" alt="{{ quiz.title }}">
-                <div class="card-body">
+            <div class="card shadow-sm h-100 d-flex flex-column">
+                <div class="card-body d-flex flex-column">
                     <h5 class="card-title">{{ quiz.title }}</h5>
                     <p class="card-text">Категорія прав: {{ quiz.get_category_display }}</p>
-                    <button type="submit" class="auth-btn">Пройти тестування</button>
+                    <div class="mt-auto">
+                        <button id="quiz-{{ quiz.pk }}-btn" class="auth-btn w-100">Пройти тестування</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -25,4 +26,16 @@
         {% endfor %}
     </div>
 </div>
+{% endblock %}
+
+{% block scripts %} 
+<script>
+    document.querySelectorAll('[id^="quiz-"]').forEach(function (button) {
+        button.addEventListener('click', function () {
+            const quizId = this.id.split('-')[1];
+            const quizUrl = `/get-quiz/${quizId}/`; 
+            window.location.href = quizUrl;
+        });
+    });
+</script>
 {% endblock %}

@@ -1,0 +1,175 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-3">
+            <div class="row">
+                <div id="questionNav">
+                    {% for question in quiz.quiz_questions.all %}
+                    <button 
+                    style="width: 50px;"
+                    class="btn btn-light m-1" 
+                    id="questionNav-{{ forloop.counter }}" 
+                    onclick="showQuestion({{ forloop.counter }})">
+                        {{ forloop.counter }}   
+                    </button>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-9">
+
+            <div id="questionsContainer" class="card p-4 mb-5">
+                {% for question in quiz.quiz_questions.all %}
+                <div class="question-block" id="question-{{ forloop.counter }}" style="display: none;">
+                    <h5>{{ forloop.counter }}. {{ question.question.text }}</h5>
+                    {% if question.question.image %}
+                    <img src="{{ question.question.image.url }}" alt="Question Image" class="img-fluid mb-2">
+                    {% endif %}
+
+                    {% for answer in question.question.answers.all %}
+                    <div class="form-check">
+                        <input 
+                            class="form-check-input" 
+                            type="radio" 
+                            name="question_{{ question.question.id }}" 
+                            value="{{ answer.id }}" 
+                            id="answer_{{ answer.id }}" 
+                            is_correct="{{ answer.is_correct }}">
+                        <label class="form-check-label" for="answer_{{ answer.id }}">
+                            {{ answer.text }}
+                        </label>
+                    </div>
+                    {% endfor %}
+
+                    <div class="mt-3 d-flex justify-content-between">
+                        <div class="d-flex">
+                            <button class="btn btn-outline-success" id="checkBtn-{{ forloop.counter }}" onclick="checkAnswer({{ forloop.counter }}, {{ question.question.id }})">Перевірити</button>
+                            <button class="btn btn-outline-secondary" id="nextBtn-{{ forloop.counter }}" onclick="nextQuestion({{ forloop.counter }})" style="display: none;">Наступний</button>
+                        </div>
+
+                        {% if question.question.explanation %}
+                        <div>
+                            <button type="button" class="btn btn-outline-info" data-bs-toggle="modal" data-bs-target="#explanationModal-{{ question.question.id }}">
+                                Пояснення <i class="bi bi-patch-question-fill"></i>
+                            </button>
+                        </div>
+                        {% endif %}
+                    </div>
+
+                        <div class="modal fade" id="explanationModal-{{ question.question.id }}" tabindex="-1" aria-labelledby="explanationModalLabel-{{ question.question.id }}" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="explanationModalLabel-{{ question.question.id }}">Пояснення</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрити"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        {{ question.question.explanation }}
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-success" data-bs-dismiss="modal">Закрити</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    
+                </div>
+                {% endfor %}
+            </div>
+
+            <button id="finishBtn" class="btn btn-success mt-4" style="display: none;" onclick="finishQuiz()">Завершити</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    let currentQuestion = 1;
+    let answeredQuestions = 0; 
+    let correctAnswers = 0;
+    let incorrectAnswers = 0;
+    let totalQuestions = {{ quiz.quiz_questions.count }};
+    let userAnswers = [];
+
+    function showQuestion(questionNumber) {
+        document.querySelectorAll('.question-block').forEach(block => block.style.display = 'none');
+        document.getElementById(`question-${questionNumber}`).style.display = 'block';
+
+        document.querySelectorAll('#questionNav button').forEach(btn => btn.classList.remove('active'));
+        document.getElementById(`questionNav-${questionNumber}`).classList.add('active');
+
+        currentQuestion = questionNumber;
+    }
+
+    function checkAnswer(questionNumber, questionId) {
+        const selectedAnswer = document.querySelector(`input[name="question_${questionId}"]:checked`);
+        if (!selectedAnswer) {
+            return;
+        }
+
+        let isCorrect = selectedAnswer.getAttribute("is_correct");
+        const navButton = document.getElementById(`questionNav-${questionNumber}`);
+        
+        if (isCorrect == "True") {
+            navButton.classList.remove('btn-light');
+            navButton.classList.add('btn-success');
+            selectedAnswer.closest('.form-check').style.backgroundColor = '#8bd18b';
+            correctAnswers++;
+        } else {
+            navButton.classList.remove('btn-light');
+            navButton.classList.add('btn-danger');
+            selectedAnswer.closest('.form-check').style.backgroundColor = '#ff7979';
+            incorrectAnswers++;
+        }
+
+        document.querySelectorAll(`input[name="question_${questionId}"]`).forEach(input => input.disabled = true);
+        document.getElementById(`checkBtn-${questionNumber}`).style.display = 'none';
+
+        if (questionNumber < {{ quiz.quiz_questions.count }}) {
+            document.getElementById(`nextBtn-${questionNumber}`).style.display = 'inline-block';
+        }
+    
+        answeredQuestions++;
+        if (answeredQuestions === {{ quiz.quiz_questions.count }}) {
+            document.getElementById('finishBtn').style.display = 'block';
+        }
+
+        const selectedAnswerId = selectedAnswer.value;
+        userAnswers.push(selectedAnswerId);
+    }
+
+    function nextQuestion(questionNumber) {
+        if (questionNumber < {{ quiz.quiz_questions.count }}) {
+            showQuestion(questionNumber + 1);
+        }
+    };
+
+    function finishQuiz() {
+        let percentage = (correctAnswers / totalQuestions) * 100; 
+
+        fetch("{% url 'submit_quiz_results' quiz.id %}", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/x-www-form-urlencoded",
+                "X-CSRFToken": "{{ csrf_token }}"
+            },
+            body: `answers[]=${userAnswers.join('&answers[]=')}`
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.message) {
+                window.location.href = `/get-history-quizzes-results/all/`; 
+            } else {
+                alert('Произошла ошибка при отправке результатов.');
+            }
+        })
+        .catch(error => alert('Произошла ошибка. Попробуйте позже.'));
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        showQuestion(1);
+    });
+</script>
+{% endblock %}

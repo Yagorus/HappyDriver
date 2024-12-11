@@ -68,7 +68,7 @@
                 {% else %}
                 <li class="nav-item">
                     <a class="nav-link profile"
-                       href="">Історія проходжень</a>
+                       href="{% url 'get_history_quizzes_results' 'all' %}">Історія проходжень</a>
                 </li>
                 {% endif %}
             {% endif %}

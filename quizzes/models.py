@@ -27,7 +27,10 @@ class Question(models.Model):
     image = models.ImageField(upload_to='questions_images/', null=True, blank=True)
 
     def __str__(self):
-        return self.text[:50]  # First 50 chars of question text
+        return self.text[:50] 
+    
+    def get_correct_answer(self):
+        return self.answers.filter(is_correct=True).first()
 
 
 class Answer(models.Model):
@@ -48,13 +51,13 @@ class QuizzesQuestions(models.Model):
 
 
 class UsersQuizzes(models.Model):
-    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
-    quiz = models.ForeignKey(Quiz, on_delete=models.CASCADE)
+    user = models.ForeignKey(CustomUser, on_delete=models.SET_NULL, null=True)
+    quiz = models.ForeignKey(Quiz, on_delete=models.SET_NULL, null=True)
     started_at = models.DateTimeField(auto_now_add=True)
     finished_at = models.DateTimeField(null=True, blank=True)
 
     def __str__(self):
-        return f'{self.user.name} - {self.quiz.title} [started at: {self.started_at}]'
+        return f'{self.user.firstname} - {self.quiz.title} [started at: {self.started_at}]'
 
 
 class Result(models.Model):
@@ -62,4 +65,4 @@ class Result(models.Model):
     answer = models.ForeignKey(Answer, on_delete=models.CASCADE)
 
     def __str__(self):
-        return f'Result for {self.user_quiz.user.name} in {self.user_quiz.quiz.title}'
+        return f'Result for {self.user_quiz.user.firstname} in {self.user_quiz.quiz.title}'

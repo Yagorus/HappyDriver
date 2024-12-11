@@ -4,7 +4,8 @@ body {
 }
 
 .btn-outline-warning:hover,
-.btn-outline-danger:hover {
+.btn-outline-danger:hover,
+.btn-outline-info:hover {
     color: white !important;
 }
 
