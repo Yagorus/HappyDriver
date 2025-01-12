@@ -17,9 +17,9 @@
                 <li><a class="dropdown-item" href="">Правила дорожнього руху</a></li>
                 <li><a class="dropdown-item" href="">Дорожні знаки</a></li>
                 <li><a class="dropdown-item" href="">Дорожня розмітка</a></li>
-                <li><a class="dropdown-item" href="">Світлофор</a></li>
-                <li><a class="dropdown-item" href="">Регулювальник</a></li>
-                <li><a class="dropdown-item" href="">Штрафи</a></li>
+                <li><a class="dropdown-item" href="{% url 'theory_traffic_light' %}">Світлофор</a></li>
+                <li><a class="dropdown-item" href="{% url 'theory_regulator' %}">Регулювальник</a></li>
+                <li><a class="dropdown-item" href="{% url 'theory_fines' %}">Штрафи</a></li>
             </ul>
             </li>
 
@@ -84,19 +84,37 @@
                 </a>
                 <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                     <li><a class="dropdown-item" href="{% url 'edit_user' %}">Редагувати профіль</a></li>
-                    <li><a class="dropdown-item" href="{% url 'delete_user' request.user.pk %}" >Видалити профіль</a></li>
+                    <li>
+                        <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#deleteModal">Видалити профіль</a>
+                    </li>
                 </ul>
             </li>
 
             <li class="nav-item">
-                <a href="{% url 'signout' %}" class="btn btn-outline-danger">Вихід</a>
+                <a href="{% url 'signout' %}" class="btn btn-outline-light">Вихід</a>
             </li>
         </ul>
-
+        <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="deleteModalLabel">Підтвердження видалення</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрити"></button>
+                    </div>
+                    <div class="modal-body">
+                        Ви впевнені, що хочете видалити профіль? Ця дія не може бути скасована.
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Скасувати</button>
+                        <a href="{% url 'delete_user' request.user.pk %}" class="btn btn-danger">Видалити</a>
+                    </div>
+                </div>
+            </div>
+        </div>
         {% else %}
         <span>
-            <a href="{% url 'signin' %}" class="btn btn-danger">Вхід</a>
-            <a href="{% url 'signup' %}" class="btn btn-outline-danger">Реєстрація</a>
+            <a href="{% url 'signin' %}" class="btn btn-light">Вхід</a>
+            <a href="{% url 'signup' %}" class="btn btn-outline-light">Реєстрація</a>
         </span>
         {% endif %}
 

@@ -30,7 +30,7 @@ def get_quizzes(request):
 
 @custom_login_required
 def choose_quiz_category(request):
-    return render(request, "quizzes/choose_quiz_category.html", {'title': 'Тести ПДР'})
+    return render(request, "quizzes/choose_quiz_category.html", {'title': 'Тести ПДР за категоріями'})
 
 
 @custom_login_required
@@ -38,13 +38,13 @@ def get_quiz(request, pk):
     quiz = Quiz.objects.get(pk=pk)
     user_quiz = UsersQuizzes.objects.create(user=request.user, quiz=quiz)
     user_quiz.save()
-    return render(request, "quizzes/get_quiz.html", {'quiz': quiz})
+    return render(request, "quizzes/get_quiz.html", {'quiz': quiz, 'title': f'Тест ПДР: {quiz.title}'})
 
 
 @custom_login_required
 def submit_quiz_results(request, quiz_id):
     quiz = get_object_or_404(Quiz, id=quiz_id)
-    user_quiz = UsersQuizzes.objects.get(user=request.user, quiz=quiz, finished_at__isnull=True)
+    user_quiz = UsersQuizzes.objects.filter(user=request.user, quiz=quiz, finished_at__isnull=True).last()
 
     if request.method == 'POST':
         user_answers = request.POST.getlist('answers[]')
@@ -56,9 +56,7 @@ def submit_quiz_results(request, quiz_id):
             )
         user_quiz.finished_at = datetime.utcnow()
         user_quiz.save()
-
-        return JsonResponse({'message': 'Результаты успешно отправлены!'})
-    return JsonResponse({'error': 'Неверный метод запроса.'}, status=400)
+        return JsonResponse({'message': 'Результати успішно відправлені!'})
 
 
 @custom_login_required
@@ -89,4 +87,4 @@ def get_history_quizzes_results(request, filter):
             quiz__is_random=False, 
             finished_at__isnull=False
         ).order_by("-finished_at")
-    return render(request, "quizzes/history_data.html", {'user_quizzes': user_quizzes})
+    return render(request, "quizzes/history_data.html", {'user_quizzes': user_quizzes, 'title': 'Історія проходжень'})

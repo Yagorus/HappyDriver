@@ -1,5 +1,9 @@
 {% extends 'base.html' %}
 
+{% block title %}
+{{ title }} :: {{ block.super }}
+{% endblock %}
+
 {% block content %}
 <div class="container">
   <h2 class="text-center mb-4 mt-5">Статистика проходження тестувань</h2>
@@ -51,13 +55,15 @@
             <li data-is-correct="{{ result.answer.is_correct }}">
               <strong>{{ forloop.counter }}. Питання:</strong> {{ result.answer.question.text }} <br>
               {% if result.answer.question.image %}
+              <div>
                 <img src="{{ result.answer.question.image.url }}" alt="Question Image" class="img-fluid mb-2">
-              {% endif %}
-              <strong>Відповідь:</strong> {{ result.answer.text }}
+            </div>
+                {% endif %}
+              <strong>Ваша відповідь:</strong> {{ result.answer.text }}
               {% if result.answer.is_correct %}
-                <span class="text-success">Правильний</span>
+                <span class="text-success">Правильна</span>
               {% else %}
-                <span class="text-danger">Неправильний</span>
+                <span class="text-danger">Неправильна</span>
                 <p class="mb-0"><strong>Правильна відповідь:</strong> {{ result.answer.question.get_correct_answer }}</p>
               {% endif %}
               {% if result.answer.question.explanation %}
@@ -94,7 +100,7 @@
         </div>
       </div>
       {% empty %}
-        <p class="text-center">Тести не знайдені.</p>
+        <p class="text-center">Ви ще не проходили такі тестування.</p>
       {% endfor %}
     </div>
   </div>

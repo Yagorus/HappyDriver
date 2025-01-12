@@ -4,6 +4,7 @@ from django.contrib.auth import login, logout
 from django.contrib import messages
 from django.views.generic import ListView
 from .models import CustomUser
+from quizzes.models import Quiz, Question, Answer, UsersQuizzes, Result
 from .utils import custom_login_required, staff_login_required
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
@@ -91,5 +92,13 @@ def edit_user(request):
 @custom_login_required
 def delete_user(request, pk):
     user = get_object_or_404(CustomUser, pk=pk)
+
+    quizzes = UsersQuizzes.objects.filter(user=user)
+    for quiz in quizzes:
+        results = Result.objects.filter(user_quiz=quiz)
+        for result in results:
+            result.delete()
+        quiz.delete()
+
     user.delete()
     return redirect('signout')
