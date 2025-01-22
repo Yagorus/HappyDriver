@@ -1,9 +1,18 @@
-from datetime import datetime
-from django.shortcuts import render, get_object_or_404
+from datetime import date, datetime
+from django.shortcuts import render, get_object_or_404, redirect
 from accounts.utils import custom_login_required
 from .models import Quiz, Question, Answer, UsersQuizzes, Result
+from accounts.models import Subscription
 from django.http import JsonResponse
+from .liqpay3 import LiqPay
+from dotenv import load_dotenv
+import os
 
+# Load environment variables from .env file
+load_dotenv()
+
+your_public_key = os.getenv('your_public_key')
+your_private_key = os.getenv('your_private_key')
 
 @custom_login_required
 def get_topic_quizzes(request):
@@ -19,8 +28,20 @@ def get_category_quizzes(request, category):
 
 @custom_login_required
 def get_paper_quizzes(request):
+    subscription = Subscription.objects.filter(user=request.user).order_by("-finished_at")[0]
+    if subscription.finished_at < date.today():
+        return redirect('pay')
     quizzes = Quiz.objects.filter(is_random=True)
     return render(request, "quizzes/quizzes.html", {'quizzes': quizzes, 'title': 'Тести ПДР по білетах'})
+
+
+@custom_login_required
+def add_subscription(request):
+    subscription = Subscription.objects.filter(user=request.user).order_by("-finished_at")[0]
+    if subscription.finished_at < date.today():
+        subscription = Subscription(user=request.user)
+        subscription.save()
+    return JsonResponse({'success': True})
 
 
 @custom_login_required
@@ -88,3 +109,20 @@ def get_history_quizzes_results(request, filter):
             finished_at__isnull=False
         ).order_by("-finished_at")
     return render(request, "quizzes/history_data.html", {'user_quizzes': user_quizzes, 'title': 'Історія проходжень'})
+
+
+@custom_login_required
+def pay(request):
+    liqpay = LiqPay(public_key=your_public_key, private_key=your_private_key)
+    params = {
+        "action": "pay",
+        "amount": "300",
+        "currency": "UAH",
+        "description": "Pay for Subscription",
+        "order_id": "order123",
+        "version": "3",
+        "sandbox": 1,
+    }
+    html = liqpay.cnb_form(params)
+    return render(request, "quizzes/payment.html",
+                  {"html": html, "public_key": your_public_key, "private_key": your_private_key})

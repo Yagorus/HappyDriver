@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.base_user import BaseUserManager
 from django.contrib.auth.models import AbstractUser
 from django.core.validators import MinValueValidator
+from datetime import date, timedelta
 
 
 class CustomUserManager(BaseUserManager):
@@ -38,7 +39,6 @@ class CustomUser(AbstractUser):
     is_staff     = models.BooleanField(default=False, verbose_name='Персонал')
     is_superuser = models.BooleanField(default=False, verbose_name='Суперкористувач')
     is_active    = models.BooleanField(default=True, verbose_name='Активний')
-    is_vip       = models.BooleanField(default=False, verbose_name='VIP користувач')
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
@@ -61,3 +61,17 @@ class CustomUser(AbstractUser):
     def get_by_email(email):
         custom_user = CustomUser.objects.get(email=email)
         return custom_user or None
+
+
+class Subscription(models.Model):
+    user = models.ForeignKey(CustomUser, on_delete=models.SET_NULL, null=True)
+    started_at = models.DateField(blank=True, null=True)
+    finished_at = models.DateField(blank=True, null=True)
+
+    def save(self, *args, **kwargs):
+        self.started_at = date.today()
+        self.finished_at = date.today() + timedelta(days=30)
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return f'{self.user.firstname} - [started at: {self.started_at}]'

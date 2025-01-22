@@ -40,6 +40,7 @@
                 <div class="i_category_select d-flex align-items-center gap-3">
                     <div class="i_category_title">Обрати категорію:</div>
                     <select id="i_category">
+                        <option value="-">-</option>
                         <option value="A">A</option>
                         <option value="B">B</option>
                         <option value="C">C</option>
@@ -59,9 +60,12 @@
 {% block scripts %} 
 <script>
     document.getElementById('i_category').addEventListener('change', function() {
-        var category = this.value;
-        var url = '{% url "get_category_quizzes" "CATEGORY" %}'.replace('CATEGORY', category);
-        window.location.href = url;
+        let category = this.value;
+        if (category !== "-") {
+            let url = '{% url "get_category_quizzes" "CATEGORY" %}'.replace('CATEGORY', category);
+            console.log(url);
+            window.location.href = url;
+        }
     });
 </script>
 {% endblock %}

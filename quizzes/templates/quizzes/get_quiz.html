@@ -156,8 +156,7 @@
         fetch("{% url 'submit_quiz_results' quiz.id %}", {
             method: "POST",
             headers: {
-                "Content-Type": "application/x-www-form-urlencoded",
-                "X-CSRFToken": "{{ csrf_token }}"
+                "Content-Type": "application/x-www-form-urlencoded"
             },
             body: `answers[]=${userAnswers.join('&answers[]=')}`
         })
@@ -165,11 +164,9 @@
         .then(data => {
             if (data.message) {
                 window.location.href = `/get-history-quizzes-results/all/`; 
-            } else {
-                alert('Произошла ошибка при отправке результатов.');
             }
         })
-        .catch(error => alert('Произошла ошибка. Попробуйте позже.'));
+        .catch(error => console.log(error));
     }
 
     document.addEventListener('DOMContentLoaded', () => {

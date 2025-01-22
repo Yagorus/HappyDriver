@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% block title %}
+{{ title }} :: {{ block.super }}
+{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-4">
+        <div class="card p-4 mb-5 mt-4 shadow-lg rounded">
+            <h2 class="auth-title text-center mb-4">Активація підписки</h2>
+            <div class="alert alert-warning">
+                <strong>Вартість підписки:</strong> 300 грн/місяць
+            </div>
+            <div class="mb-4">
+                <p>Підписка активується на один місяць і надає доступ до тестувань у вигляді білетів. Після активації підписки ви зможете проходити ще більше видів тестувань, отримувати результати та покращувати свої знання.</p>
+            </div>
+            <div class="border-top pt-4 d-flex justify-content-center">
+                <button id="activateDiv" class="btn btn-danger">Активувати</button>
+                <div id="payDiv" class="d-none">
+                    {{ html|safe }}
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    let payDivEl = document.getElementById("payDiv");
+    let activateDivEl = document.getElementById("activateDiv");
+
+    activateDivEl.addEventListener("click", function() {
+        fetch("{% url 'add_subscription' %}", {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({})
+        })
+        payDivEl.classList.remove("d-none");
+        activateDivEl.classList.add("d-none");
+    });
+
+</script>
+{% endblock %}

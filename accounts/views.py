@@ -1,3 +1,5 @@
+import json
+from django.http import JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from .forms import UserLoginForm, UserRegisterForm, UserEditForm
 from django.contrib.auth import login, logout
@@ -102,3 +104,39 @@ def delete_user(request, pk):
 
     user.delete()
     return redirect('signout')
+
+
+@staff_login_required
+def create_quiz(request):
+    if request.method == 'GET':
+        return render(request, 'accounts/create_quiz.html')
+
+    elif request.method == 'POST':
+        data = json.loads(request.POST['data'])
+        files = request.FILES
+
+        quiz = Quiz.objects.create(
+            title=data['testName'],
+            category=data['category'],
+            is_random=data['isRandom']
+        )
+
+        for question_index, question_data in enumerate(data['questions']):
+            image_key = f'questions[{question_index}][image]'
+            image_file = files.get(image_key) if image_key in files else None
+
+            question = Question.objects.create(
+                text=question_data['text'],
+                explanation=question_data.get('explanation', ''),
+                image=image_file
+            )
+            quiz.quiz_questions.create(question=question)
+
+            for answer_data in question_data['answers']:
+                Answer.objects.create(
+                    question=question,
+                    text=answer_data['text'],
+                    is_correct=answer_data['is_correct']
+                )
+
+        return JsonResponse({'message': 'Тестування створено!'}, status=201)

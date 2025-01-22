@@ -1,0 +1,320 @@
+{% extends 'base.html' %}
+
+{% block title %}
+{{ title }} :: {{ block.super }}
+{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+<div class="col-md-8">
+<div class="card p-4 mb-5 mt-4">
+<h2 class="auth-title">Створення тестування</h2>
+ <form id="testForm" enctype="multipart/form-data">
+            <div class="mb-3">
+                <label for="testName" class="form-label">Назва:</label>
+                <input type="text" id="testName" name="testName" class="form-control" placeholder="Введите название теста" required>
+            </div>
+
+            <div class="mb-3">
+                <label for="category" class="form-label">Категорія прав:</label>
+                <select id="category" name="category" class="form-select" required>
+                    <option value="">Оберіть категорію</option>
+                    <option value="A">A</option>
+                    <option value="B">B</option>
+                    <option value="C">C</option>
+                    <option value="D">D</option>
+                    <option value="E">E</option>
+                    <option value="ALL">ALL</option>
+                </select>
+            </div>
+
+            <div class="mb-3 form-check">
+                <input type="checkbox" id="isRandom" name="isRandom" class="form-check-input">
+                <label for="isRandom" class="form-check-label">Є білетом</label>
+            </div>
+
+            <div id="questionsContainer" class="mb-4">
+
+            </div>
+
+             <div class="mb-3">
+                <input type="file" id="excelFileInput" accept=".xls,.xlsx" class="form-control mb-3">
+                <button type="button" id="loadExcelData" class="btn btn-primary">Загрузить данные из Excel</button>
+            </div>
+
+            <div>
+                <button type="button" id="addQuestionBtn" class="btn btn-success">+ додати питання</button>
+                <button type="submit" class="btn choose-btn">Створити тест</button>
+            </div>
+
+        </form>
+
+</div>
+</div>
+</div>
+
+<script>
+    const questionsContainer = document.getElementById('questionsContainer');
+    const addQuestionBtn = document.getElementById('addQuestionBtn');
+
+    let questionIndex = 0;
+
+    function updateQuestionIndices() {
+        const questionDivs = questionsContainer.querySelectorAll('.question-item');
+        questionDivs.forEach((div, index) => {
+            const questionNumber = index + 1;
+            div.id = `question_${questionNumber}`;
+            div.querySelector('.question-title h5').textContent = `Питання ${questionNumber}`;
+
+            // Update input names
+            const inputs = div.querySelectorAll('input, textarea');
+            inputs.forEach((input) => {
+                const name = input.name.replace(/\d+/, questionNumber);
+                input.name = name;
+            });
+        });
+        questionIndex = questionDivs.length;
+    }
+
+    addQuestionBtn.addEventListener('click', () => {
+        updateQuestionIndices();
+        questionIndex++;
+        const questionDiv = document.createElement('div');
+        questionDiv.classList.add('mb-4', 'border', 'p-3', 'rounded', 'question-item');
+        questionDiv.id = `question_${questionIndex}`;
+        questionDiv.innerHTML = `
+            <div class="d-flex justify-content-between align-items-center question-title">
+                <h5>Питання ${questionIndex}</h5>
+                <button type="button" class="btn btn-danger btn-sm remove-question-btn">видалити</button>
+            </div>
+            <div class="mb-3">
+                <label for="question_${questionIndex}" class="form-label">Текст питання:</label>
+                <input type="text" id="question_${questionIndex}" name="questions[${questionIndex}][name]" class="form-control" placeholder="Введіть текст питання" required>
+            </div>
+            <div class="mb-3">
+                <label for="explanation_${questionIndex}" class="form-label">Пояснення:</label>
+                <textarea id="explanation_${questionIndex}" name="questions[${questionIndex}][explanation]" class="form-control" rows="2" placeholder="Введіть пояснення"></textarea>
+            </div>
+            <div class="mb-3">
+                <label for="image_${questionIndex}" class="form-label">Зображення (додатково):</label>
+                <input type="file" id="image_${questionIndex}" name="questions[${questionIndex}][image]" class="form-control">
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Варіанти відповідей:</label>
+                <div>
+                    ${[1, 2, 3].map(i => `
+                        <div class="input-group mb-2">
+                            <div class="input-group-text">
+                                <input type="radio" name="questions[${questionIndex}][correct]" value="${i}" required>
+                            </div>
+                            <input type="text" name="questions[${questionIndex}][answers][${i}]" class="form-control" placeholder="Варіант ${i}" required>
+                        </div>
+                    `).join('')}
+                </div>
+            </div>
+        `;
+
+        questionsContainer.appendChild(questionDiv);
+
+        // Add event listener to the "Delete" button
+        questionDiv.querySelector('.remove-question-btn').addEventListener('click', () => {
+            questionsContainer.removeChild(questionDiv);
+            updateQuestionIndices();
+        });
+    });
+
+    document.getElementById('testForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const formData = new FormData(e.target);
+        const data = {
+            testName: formData.get('testName'),
+            category: formData.get('category'),
+            isRandom: formData.get('isRandom') === 'on',
+            questions: []
+        };
+
+        const questionDivs = document.querySelectorAll('.question-item');
+        questionDivs.forEach((div, index) => {
+            const question = {
+                text: div.querySelector(`[name^="questions"]`).value,
+                explanation: div.querySelector(`[name^="questions"][name$="[explanation]"]`).value,
+                answers: []
+            };
+
+            const imageInput = div.querySelector(`[name^="questions"][name$="[image]"]`);
+            if (imageInput && imageInput.files.length > 0) {
+                formData.append(`questions[${index}][image]`, imageInput.files[0]);
+            }
+
+            const answers = div.querySelectorAll(`[name^="questions"][name*="[answers]"]`);
+            answers.forEach((answerInput, i) => {
+                question.answers.push({
+                    text: answerInput.value,
+                    is_correct: div.querySelector(`[name^="questions"][value="${i + 1}"]`).checked
+                });
+            });
+
+            data.questions.push(question);
+        });
+
+        formData.append('data', JSON.stringify(data));
+
+        const response = await fetch('', {
+            method: 'POST',
+            body: formData
+        });
+
+        if (response.ok) {
+            window.location.href = '/quizzes/';
+        }
+    });
+
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script>
+    function stringToBoolean(str) {
+        return str.toLowerCase() === "true";
+    }
+
+    const excelFileInput = document.getElementById('excelFileInput');
+    const loadExcelData = document.getElementById('loadExcelData');
+
+    loadExcelData.addEventListener('click', async () => {
+        const file = excelFileInput.files[0];
+        if (!file) {
+            alert('Виберіть файл Excel для завантаження.');
+            return;
+        }
+
+        const reader = new FileReader();
+        reader.onload = function (e) {
+            const data = new Uint8Array(e.target.result);
+            const workbook = XLSX.read(data, { type: 'array' });
+
+            const sheetName = workbook.SheetNames[0];
+            const worksheet = workbook.Sheets[sheetName];
+            const jsonData = XLSX.utils.sheet_to_json(worksheet);
+
+            populateTestData(jsonData);
+        };
+        reader.readAsArrayBuffer(file);
+    });
+
+    function populateTestData(data) {
+        const questionKeys = data
+            .map(obj => obj.key)
+            .filter(key => key.startsWith("questions["))
+            .map(key => key.match(/questions\[(\d+)\]/)?.[1])
+            .filter((index, pos, self) => self.indexOf(index) === pos);
+        const questionCount = questionKeys.length;
+
+        let q = data.map(obj => ({ [obj.key]: obj.value }));
+        console.log(q);
+        let test_name = null;
+        let category = null;
+        let is_random = null;
+        let questions = [];
+
+        q.forEach(item => {
+            if (item.testName) {
+                test_name = item.testName;
+            } else if (item.category) {
+                category = item.category;
+            } else if (item.isRandom) {
+                is_random = stringToBoolean(item.isRandom);
+            }
+        });
+
+        for (let i = 1; i <= questionCount; i++) {
+            let temp = `questions[${i}]`;
+            let res = {
+                "answers": []
+            };
+            q.forEach(item => {
+                const key = Object.keys(item)[0];
+                if (key.startsWith(temp)) {
+                    let secPart = key.slice(temp.length);
+                    if (secPart == "[name]") {
+                        res['name'] = item[key];
+                    } else if (secPart == "[explanation]") {
+                        res['explanation'] = item[key];
+                    } else if (secPart == "[image]") {
+                        res['image'] = item[key];
+                    } else if (secPart.startsWith("[answers]")) {
+                        res['answers'].push(item[key]);
+                    }
+                }
+            });
+            questions.push(res);
+        }
+
+        const form_data = {
+            testName: test_name,
+            category: category,
+            isRandom: is_random,
+            questions: questions
+        };
+
+        console.log(form_data);
+
+        document.getElementById("testName").value = test_name;
+        document.getElementById("category").value = category;
+        document.getElementById("isRandom").checked = is_random;
+
+        questions.forEach((row, index) => {
+            console.log(row);
+            const questionIndex = index + 1;
+
+            const questionDiv = document.createElement('div');
+            questionDiv.classList.add('mb-4', 'border', 'p-3', 'rounded', 'question-item');
+            questionDiv.id = `question_${questionIndex}`;
+            questionDiv.innerHTML = `
+                <div class="d-flex justify-content-between align-items-center question-title">
+                    <h5>Питання ${questionIndex}</h5>
+                    <button type="button" class="btn btn-danger btn-sm remove-question-btn">видалити</button>
+                </div>
+                <div class="mb-3">
+                    <label for="question_${questionIndex}" class="form-label">Текст питання:</label>
+                    <input value="${row.name}" type="text" id="question_${questionIndex}" name="questions[${questionIndex}][name]" class="form-control" placeholder="Введіть текст питання" required>
+                </div>
+                <div class="mb-3">
+                    <label for="explanation_${questionIndex}" class="form-label">Пояснення:</label>
+                    <textarea id="explanation_${questionIndex}" name="questions[${questionIndex}][explanation]" class="form-control" rows="2" placeholder="Введіть пояснення">${row.explanation}</textarea>
+                </div>
+                <div class="mb-3">
+                    <label for="image_${questionIndex}" class="form-label">Зображення (додатково):</label>
+                    <input type="file" id="image_${questionIndex}" name="questions[${questionIndex}][image]" class="form-control">
+                    <a href="${row.image}" target="_blank">${row.image}</a>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Варіанти відповідей:</label>
+                    <div>
+                        ${[1, 2, 3].map(i => `
+                            <div class="input-group mb-2">
+                                <div class="input-group-text">
+                                    <input type="radio" name="correct_answer_${questionIndex}" value="${i}" ${i === 1 ? 'checked' : ''} required>
+                                </div>
+                                <input type="text" name="questions[${questionIndex}][answers][${i}]" class="form-control" placeholder="Варіант ${i}" value="${row.answers[i-1]}" required>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+
+            questionsContainer.appendChild(questionDiv);
+
+            // Add event listener to the "Delete" button
+            questionDiv.querySelector('.remove-question-btn').addEventListener('click', () => {
+                questionsContainer.removeChild(questionDiv);
+                updateQuestionIndices();
+            });
+        });
+
+
+        updateQuestionIndices();
+    }
+</script>
+
+
+{% endblock %}
