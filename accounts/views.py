@@ -140,3 +140,49 @@ def create_quiz(request):
                 )
 
         return JsonResponse({'message': 'Тестування створено!'}, status=201)
+
+
+@staff_login_required
+def add_question(request):
+    if request.method == 'POST':
+        quiz_ids = request.POST.getlist('quiz_ids')
+        text = request.POST.get('text')
+        explanation = request.POST.get('explanation', '')
+        image = request.FILES.get('image', '')
+        correct_answer = request.POST.get('correct_answer')
+        answers = request.POST.getlist('answers[]')
+
+        if not quiz_ids or not text or not correct_answer or len(answers) < 2:
+            return JsonResponse({'error': 'Усі поля мають бути заповнені'}, status=400)
+
+        question = Question.objects.create(text=text, explanation=explanation, image=image)
+        quizzes = Quiz.objects.filter(id__in=quiz_ids)
+        for quiz in quizzes:
+            quiz.quiz_questions.create(question=question)
+
+        for i, answer_text in enumerate(answers, start=1):
+            Answer.objects.create(
+                question=question,
+                text=answer_text,
+                is_correct=(str(i) == correct_answer)
+            )
+
+        return JsonResponse({'message': 'Питання додано успішно!'}, status=201)
+
+    quizzes = Quiz.objects.all()
+    return render(request, "accounts/add_question.html", {"quizzes": quizzes})
+
+
+@staff_login_required
+def delete_question(request, question_id):
+    question = get_object_or_404(Question, id=question_id)
+    question.delete_question()
+    return redirect('question_list')
+    
+
+@method_decorator(staff_login_required, name='dispatch')
+class QuestionList(ListView):
+    context_object_name = 'questions'
+    paginate_by = 15
+    model = Question
+    template_name = 'accounts/question_list.html'

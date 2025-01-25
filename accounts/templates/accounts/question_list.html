@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Список питань :: {{ block.super }}
+{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-11">
+        <div class="card p-4 mb-5 mt-4">
+            <h2 class="auth-title">Список питань</h2>
+
+    {% if questions %}
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Текст питання</th>
+                    <th>Зображення</th>
+                    <th>Пояснення</th>
+                    <th>Дії</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for question in questions %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{ question.text }}</td>
+                    <td>
+                        {% if question.image %}
+                            <img src="{{ question.image.url }}" alt="Зображення" style="max-width: 100px; max-height: 100px; object-fit: cover;">
+                        {% endif %}
+                    </td>
+                    <td>{{ question.explanation|default:"" }}</td>
+                    <td>
+                        <a href="{% url 'delete_question' question.id %}" class="btn" style="color: red;"><i class="bi bi-trash3"></i></a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>Немає доступних питань.</p>
+    {% endif %}
+</div>
+</div>
+</div>
+</div>
+{% endblock %}

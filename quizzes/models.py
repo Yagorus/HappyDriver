@@ -31,11 +31,16 @@ class Question(models.Model):
     
     def get_correct_answer(self):
         return self.answers.filter(is_correct=True).first()
+    
+    def delete_question(self):
+        self.answers.all().delete()
+        self.quiz_questions.all().delete()
+        self.delete()
 
 
 class Answer(models.Model):
     question = models.ForeignKey(Question, related_name='answers', on_delete=models.CASCADE)
-    text = models.CharField(max_length=255)
+    text = models.TextField()
     is_correct = models.BooleanField(default=False)
 
     def __str__(self):

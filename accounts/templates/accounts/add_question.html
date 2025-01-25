@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Додавання питання :: {{ block.super }}
+{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card p-4 mb-5 mt-4">
+            <h2 class="auth-title">Додавання питання</h2>
+            <form id="questionForm" enctype="multipart/form-data">
+                <div class="mb-3">
+                    <label for="testSelect" class="form-label">Оберіть тести:</label>
+                    <select id="testSelect" name="quiz_ids" class="form-select" multiple required>
+                        {% for quiz in quizzes %}
+                        <option value="{{ quiz.id }}">{{ quiz.title }}</option>
+                        {% endfor %}
+                    </select>
+                    <small class="form-text text-muted">Утримуйте Ctrl (або Cmd на Mac), щоб обрати декілька тестів.</small>
+                </div>
+                
+
+                <div class="mb-3">
+                    <label for="questionText" class="form-label">Текст питання:</label>
+                    <textarea id="questionText" name="text" class="form-control" rows="3" placeholder="Введіть текст питання" required></textarea>
+                </div>
+
+                <div class="mb-3">
+                    <label for="explanation" class="form-label">Пояснення (додатково):</label>
+                    <textarea id="explanation" name="explanation" class="form-control" rows="2" placeholder="Введіть пояснення"></textarea>
+                </div>
+
+                <div class="mb-3">
+                    <label for="image" class="form-label">Зображення (додатково):</label>
+                    <input type="file" id="image" name="image" class="form-control">
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Варіанти відповідей:</label>
+                    <div id="answersContainer">
+                        {% for i in "123"|make_list %}
+                        <div class="input-group mb-2">
+                            <div class="input-group-text">
+                                <input type="radio" name="correct_answer" value="{{ i }}" required>
+                            </div>
+                            <input type="text" name="answers[]" class="form-control" placeholder="Варіант {{ i }}" required>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                
+
+                <div class="text-end">
+                    <button type="submit" class="btn choose-btn">Додати</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.getElementById('questionForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const formData = new FormData(e.target);
+
+        const response = await fetch('', {
+            method: 'POST',
+            body: formData
+        });
+
+        if (response.ok) {
+            window.location.href = '/';
+        } else {
+            const errorData = await response.json();
+            console.log(errorData.error || 'Сталася помилка');
+        }
+    });
+</script>
+{% endblock %}

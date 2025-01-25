@@ -28,8 +28,8 @@ def get_category_quizzes(request, category):
 
 @custom_login_required
 def get_paper_quizzes(request):
-    subscription = Subscription.objects.filter(user=request.user).order_by("-finished_at")[0]
-    if subscription.finished_at < date.today():
+    subscriptions = Subscription.objects.filter(user=request.user).order_by("-finished_at")
+    if not subscriptions or subscriptions[0].finished_at < date.today():
         return redirect('pay')
     quizzes = Quiz.objects.filter(is_random=True)
     return render(request, "quizzes/quizzes.html", {'quizzes': quizzes, 'title': 'Тести ПДР по білетах'})
@@ -37,8 +37,8 @@ def get_paper_quizzes(request):
 
 @custom_login_required
 def add_subscription(request):
-    subscription = Subscription.objects.filter(user=request.user).order_by("-finished_at")[0]
-    if subscription.finished_at < date.today():
+    subscriptions = Subscription.objects.filter(user=request.user).order_by("-finished_at")
+    if not subscriptions or subscriptions[0].finished_at < date.today():
         subscription = Subscription(user=request.user)
         subscription.save()
     return JsonResponse({'success': True})
