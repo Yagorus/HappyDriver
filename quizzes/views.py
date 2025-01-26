@@ -1,15 +1,19 @@
 from datetime import date, datetime
 from django.shortcuts import render, get_object_or_404, redirect
 from accounts.utils import custom_login_required
+from django.contrib.auth.decorators import login_required
 from accounts.models import CustomUser
-from .models import Quiz, Question, Answer, UsersQuizzes, Result
+from .models import Quiz, Question, Answer, UsersQuizzes, Result, QuizzesQuestions
+from .forms import CategoryForm
 from accounts.models import Subscription
 from django.http import JsonResponse
 from .liqpay3 import LiqPay
 from dotenv import load_dotenv
 import os
+from django.contrib import messages
+import random
 
-# Load environment variables from .env file
+
 load_dotenv()
 
 your_public_key = os.getenv('your_public_key')
@@ -17,9 +21,9 @@ your_private_key = os.getenv('your_private_key')
 
 
 def home_page(request):
-    users_= CustomUser.objects.all().count()
+    users_= CustomUser.objects.filter(is_staff=False).count()
     questions = Question.objects.all().count()
-    quizzes = Quiz.objects.all().order_by('-created_at')
+    quizzes = Quiz.objects.filter(is_random=False).order_by('-created_at')
     latest_quiz = quizzes[0] if quizzes else None
     context = {
             'users_count': users_,
@@ -47,8 +51,29 @@ def get_paper_quizzes(request):
     subscriptions = Subscription.objects.filter(user=request.user).order_by("-finished_at")
     if not subscriptions or subscriptions[0].finished_at < date.today():
         return redirect('pay')
-    quizzes = Quiz.objects.filter(is_random=True)
-    return render(request, "quizzes/quizzes.html", {'quizzes': quizzes, 'title': 'Тести ПДР по білетах'})
+
+    if request.method == "POST":
+        form = CategoryForm(request.POST)
+        if form.is_valid():
+            category = form.cleaned_data['category']
+            random_number = random.randint(100000, 999999)
+            quiz = Quiz.objects.create(title=f"Білет #{random_number}", category=category, is_random=True)
+            quizzes = Quiz.objects.filter(category__in=[category])
+            questions = Question.objects.filter(quiz_questions__quiz__in=quizzes)
+
+            count = 20 if questions.count() > 20 else questions.count()
+            random_questions = questions.order_by('?')[:count] 
+            print(count)
+            for question in random_questions:
+                QuizzesQuestions.objects.create(quiz=quiz, question=question)
+            return redirect("get_quiz", quiz.pk)
+    else:
+        form = CategoryForm()
+
+    return render(request, "quizzes/get_paper_quiz.html", {
+        'title': 'Випадковий білет',
+        'form': form
+    })
 
 
 @custom_login_required
@@ -96,14 +121,15 @@ def submit_quiz_results(request, quiz_id):
         return JsonResponse({'message': 'Результати успішно відправлені!'})
 
 
-@custom_login_required
-def get_history_quizzes_results(request, filter):
+@login_required
+def get_history_quizzes_results(request, pk, filter):
+    user = get_object_or_404(CustomUser, pk=pk)
     if filter == "all":
-        user_quizzes = UsersQuizzes.objects.filter(user=request.user, finished_at__isnull=False).order_by("-finished_at")
+        user_quizzes = UsersQuizzes.objects.filter(user=user, finished_at__isnull=False).order_by("-finished_at")
 
     elif filter == "by-topics":
         user_quizzes = UsersQuizzes.objects.filter(
-            user=request.user,
+            user=user,
             quiz__category="ALL",
             quiz__is_random=False,
             finished_at__isnull=False
@@ -111,7 +137,7 @@ def get_history_quizzes_results(request, filter):
 
     elif filter == "by-paper":
         user_quizzes = UsersQuizzes.objects.filter(
-            user=request.user, 
+            user=user, 
             quiz__is_random=True, 
             finished_at__isnull=False
         ).order_by("-finished_at")
@@ -119,26 +145,39 @@ def get_history_quizzes_results(request, filter):
     elif "by-category-" in filter:
         category = filter.split("-")[-1].upper()
         user_quizzes = UsersQuizzes.objects.filter(
-            user=request.user, 
+            user=user, 
             quiz__category=category, 
             quiz__is_random=False, 
             finished_at__isnull=False
         ).order_by("-finished_at")
-    return render(request, "quizzes/history_data.html", {'user_quizzes': user_quizzes, 'title': 'Історія проходжень'})
+    
+    count = user_quizzes.count()
+    print(count)
+    return render(request, "quizzes/history_data.html", {
+        'user_quizzes': user_quizzes, 
+        'count': count, 
+        'title': 'Історія проходжень',
+        'user_pk': pk
+    })
 
 
 @custom_login_required
 def pay(request):
-    liqpay = LiqPay(public_key=your_public_key, private_key=your_private_key)
-    params = {
-        "action": "pay",
-        "amount": "300",
-        "currency": "UAH",
-        "description": "Pay for Subscription",
-        "order_id": "order123",
-        "version": "3",
-        "sandbox": 1,
-    }
-    html = liqpay.cnb_form(params)
-    return render(request, "quizzes/payment.html",
-                  {"html": html, "public_key": your_public_key, "private_key": your_private_key})
+    subscriptions = Subscription.objects.filter(user=request.user).order_by("-finished_at")
+    if not subscriptions or subscriptions[0].finished_at < date.today():
+        liqpay = LiqPay(public_key=your_public_key, private_key=your_private_key)
+        params = {
+            "action": "pay",
+            "amount": "300",
+            "currency": "UAH",
+            "description": "Pay for Subscription",
+            "order_id": "order123",
+            "version": "3",
+            "sandbox": 1,
+        }
+        html = liqpay.cnb_form(params)
+        return render(request, "quizzes/payment.html",
+                    {"html": html, "public_key": your_public_key, "private_key": your_private_key})
+
+    messages.success(request, "Ви вже активували підписку.")
+    return redirect('home')

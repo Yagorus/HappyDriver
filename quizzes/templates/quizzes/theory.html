@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+Теорія ПДР :: {{ block.super }}
+{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="text-center mb-4">Теорія ПДР</h2>
+
+    <div class="row justify-content-center mt-5">
+  
+      <div class="col-md-4 mb-4">
+        <a href="{% url 'road_signs' %}" class="no-outline">
+        <div class="card p-4 card-min-height">
+          <h3 class="text-center">Дорожні знаки</h3>
+          <div class="d-flex justify-content-center align-items-center">
+            <img src="{% static 'img/pdr_2.svg' %}" style="width: 90px; height: 100px;">
+          </div>
+        </div>
+        </a>
+      </div>        
+  
+      <div class="col-md-4 mb-4">
+        <a href="{% url 'road_markings' %}" class="no-outline">
+        <div class="card p-4 card-min-height">
+            <h3 class="text-center">Дорожня розмітка</h3>
+            <div class="d-flex justify-content-center align-items-center">
+                <img src="{% static 'img/pdr_3.svg' %}" style="width: 90px; height: 100px;">
+            </div>
+        </div>
+        </a>    
+      </div>  
+  
+      <div class="col-md-4 mb-4">
+        <a href="{% url 'theory_traffic_light' %}" class="no-outline">
+            <div class="card p-4 card-min-height text-center">
+                <h3 class="text-center">Світлофор</h3>
+                <div class="d-flex justify-content-center align-items-center">
+                  <img src="{% static 'img/pdr_4.svg' %}" style="width: 90px; height: 100px;">
+                </div>
+            </div>
+        </a>
+      </div>
+
+    </div>
+
+    <div class="row justify-content-center mt-5">
+  
+        <div class="col-md-4 mb-4">
+          <a href="{% url 'theory_regulator' %}" class="no-outline">
+          <div class="card p-4 card-min-height">
+            <h3 class="text-center">Регулювальник</h3>
+            <div class="d-flex justify-content-center align-items-center">
+                <img src="{% static 'img/pdr_5.svg' %}" style="width: 90px; height: 100px;">
+            </div>
+          </div>
+          </a>
+        </div>        
+    
+        <div class="col-md-4 mb-4">
+            <a href="{% url 'theory_fines' %}" class="no-outline">
+          <div class="card p-4 card-min-height">
+              <h3 class="text-center">Штрафи ПДР</h3>
+              <div class="d-flex justify-content-center align-items-center">
+                <img src="{% static 'img/pdr_6.svg' %}" style="width: 90px; height: 100px;">
+              </div>
+          </div>
+        </a>
+        </div>  
+    
+    </div>
+
+</div>
+
+{% endblock %}
+{% block scripts %} 
+
+{% endblock %}

@@ -17,6 +17,7 @@
                             <th>Назва тесту</th>
                             <th>Категорія</th>
                             <th>Кількість питань</th>
+                            <th>Кількість проходжень</th>
                             <th>Дата створення</th>
                             <th>Дії</th>
                         </tr>
@@ -27,6 +28,7 @@
                             <td>{{ quiz.title }}</td>
                             <td>{{ quiz.get_category_display }}</td>
                             <td>{{ quiz.quiz_questions.count }}</td>
+                            <td>{{quiz.usersquizzes_set.count}}</td>
                             <td>{{ quiz.created_at|date:"d.m.Y H:i" }}</td>
                             <td class="align-items-center">
                                 <a href="{% url 'edit_quiz' quiz.id %}" class="btn" style="color: orange;"><i class="bi bi-pencil-fill"></i></a>

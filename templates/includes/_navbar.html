@@ -15,7 +15,6 @@
                 Теорія ПДР
             </a>
             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                <li><a class="dropdown-item" href="{% url 'pdr' %}">Правила дорожнього руху</a></li>
                 <li><a class="dropdown-item" href="{% url 'road_signs' %}">Дорожні знаки</a></li>
                 <li><a class="dropdown-item" href="{% url 'road_markings' %}">Дорожня розмітка</a></li>
                 <li><a class="dropdown-item" href="{% url 'theory_traffic_light' %}">Світлофор</a></li>
@@ -65,10 +64,16 @@
                     </ul>
                     </li>
 
+                    <li class="nav-item">
+                        <a class="nav-link profile"
+                           href="{% url 'user_list' %}">Користувачі
+                        </a>
+                    </li>
                 {% else %}
                 <li class="nav-item">
                     <a class="nav-link profile"
-                       href="{% url 'get_history_quizzes_results' 'all' %}">Історія проходжень</a>
+                       href="{% url 'get_history_quizzes_results' pk=request.user.id filter='all' %}">Історія проходжень
+                    </a>
                 </li>
                 {% endif %}
             {% endif %}

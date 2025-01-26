@@ -94,6 +94,8 @@
     let incorrectAnswers = 0;
     let totalQuestions = {{ quiz.quiz_questions.count }};
     let userAnswers = [];
+    let activeUser = {{ request.user.id }};
+    console.log(activeUser);
 
     function showQuestion(questionNumber) {
         document.querySelectorAll('.question-block').forEach(block => block.style.display = 'none');
@@ -163,7 +165,7 @@
         .then(response => response.json())
         .then(data => {
             if (data.message) {
-                window.location.href = `/get-history-quizzes-results/all/`; 
+                window.location.href = `/get-history-quizzes-results/${activeUser}/all/`; 
             }
         })
         .catch(error => console.log(error));

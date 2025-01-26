@@ -58,6 +58,11 @@ class ListUsers(ListView):
     model = CustomUser
     template_name = 'accounts/user_list.html'
 
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        queryset = queryset.filter(is_staff=False)
+        return queryset
+
 
 @staff_login_required
 def add_assistant(request):
@@ -242,7 +247,7 @@ def add_question(request):
 
         return JsonResponse({'message': 'Питання додано успішно!'}, status=201)
 
-    quizzes = Quiz.objects.all()
+    quizzes = Quiz.objects.filter(is_random=False)
     return render(request, "accounts/add_question.html", {"quizzes": quizzes})
 
 

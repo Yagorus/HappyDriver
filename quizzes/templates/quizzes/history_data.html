@@ -6,34 +6,34 @@
 
 {% block content %}
 <div class="container">
-  <h2 class="text-center mb-4 mt-5">Статистика проходження тестувань</h2>
-
+  <h2 class="text-center mt-5">Статистика проходження тестувань</h2>
+  <i><p class="text-center mb-4">Кількість: {{ count }}</p></i>
   <div class="row justify-content-center">
 
     <div class="col-md-2">
         <div class="list-group">
-            <a href="{% url 'get_history_quizzes_results' 'all' %}" class="list-group-item list-group-item-action">
+            <a href="{% url 'get_history_quizzes_results' pk=user_pk filter='all' %}" class="list-group-item list-group-item-action">
                 Усі
               </a>
-          <a href="{% url 'get_history_quizzes_results' 'by-topics' %}" class="list-group-item list-group-item-action">
+          <a href="{% url 'get_history_quizzes_results' pk=user_pk filter='by-topics' %}" class="list-group-item list-group-item-action">
             По темам
           </a>
-          <a href="{% url 'get_history_quizzes_results' 'by-paper' %}" class="list-group-item list-group-item-action">
+          <a href="{% url 'get_history_quizzes_results' pk=user_pk filter='by-paper' %}" class="list-group-item list-group-item-action">
             По білетам
           </a>
-          <a href="{% url 'get_history_quizzes_results' 'by-category-A' %}" class="list-group-item list-group-item-action">
+          <a href="{% url 'get_history_quizzes_results' pk=user_pk filter='by-category-A' %}" class="list-group-item list-group-item-action">
             По категорії A
           </a>
-          <a href="{% url 'get_history_quizzes_results' 'by-category-B' %}" class="list-group-item list-group-item-action">
+          <a href="{% url 'get_history_quizzes_results' pk=user_pk filter='by-category-B' %}" class="list-group-item list-group-item-action">
             По категорії B
           </a>
-          <a href="{% url 'get_history_quizzes_results' 'by-category-C' %}" class="list-group-item list-group-item-action">
+          <a href="{% url 'get_history_quizzes_results' pk=user_pk filter='by-category-C' %}" class="list-group-item list-group-item-action">
             По категорії C
           </a>
-          <a href="{% url 'get_history_quizzes_results' 'by-category-D' %}" class="list-group-item list-group-item-action">
+          <a href="{% url 'get_history_quizzes_results' pk=user_pk filter='by-category-D' %}" class="list-group-item list-group-item-action">
             По категорії D
           </a>
-          <a href="{% url 'get_history_quizzes_results' 'by-category-E' %}" class="list-group-item list-group-item-action">
+          <a href="{% url 'get_history_quizzes_results' pk=user_pk filter='by-category-E' %}" class="list-group-item list-group-item-action">
             По категорії E
           </a>
         </div>

@@ -4,16 +4,16 @@
         <div class="col-md-4 mb-4">
             <h4>HappyDriver</h4>
           <div class="footer-subnav">
-            <a href="politika-konfidencijnosti/" class="text-white">Політика конфіденційності</a>
+            <a href="{% url 'politika' %}" class="text-white">Політика конфіденційності</a>
           </div>
         </div>
   
         <div class="col-md-4 mb-4">
           <ul class="footer-menu list-unstyled">
-            <li><a href="teoriya-pdr/" class="text-white">Теорія ПДР</a></li>
+            <li><a href="{% url 'theory' %}" class="text-white">Теорія ПДР</a></li>
             <li><a href="{% url 'get_quizzes' %}" class="text-white">Тести ПДР Онлайн</a></li>
             <li><a href="/#contacts" class="text-white">Контакти</a></li>
-            <li><a href="premium/" class="text-white">Підписка ПДР ОНЛАЙН</a></li>
+            <li><a href="{% url 'pay' %}" class="text-white">Підписка ПДР ОНЛАЙН</a></li>
           </ul>
         </div>
   
