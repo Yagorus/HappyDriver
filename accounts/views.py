@@ -6,7 +6,7 @@ from django.contrib.auth import login, logout
 from django.contrib import messages
 from django.views.generic import ListView
 from .models import CustomUser
-from quizzes.models import Quiz, Question, Answer, UsersQuizzes, Result
+from quizzes.models import Quiz, Question, Answer, UsersQuizzes, Result, CATEGORY_CHOICES
 from .utils import custom_login_required, staff_login_required
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
@@ -106,6 +106,27 @@ def delete_user(request, pk):
     return redirect('signout')
 
 
+@method_decorator(staff_login_required, name='dispatch')
+class QuizList(ListView):
+    context_object_name = 'quizzes'
+    paginate_by = 15
+    model = Quiz
+    template_name = 'accounts/quiz_list.html'
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        queryset = queryset.order_by('created_at')
+        return queryset
+
+
+@staff_login_required
+def delete_quiz(request, quiz_id):
+    quiz = get_object_or_404(Quiz, id=quiz_id)
+    quiz.delete_quiz()
+    messages.success(request, "Тест успішно видалено.")
+    return redirect('quiz_list')
+
+
 @staff_login_required
 def create_quiz(request):
     if request.method == 'GET':
@@ -143,6 +164,58 @@ def create_quiz(request):
 
 
 @staff_login_required
+def edit_quiz(request, quiz_id):
+    quiz = get_object_or_404(Quiz, id=quiz_id)
+
+    if request.method == 'GET':
+        questions = [quiz_question.question for quiz_question in quiz.quiz_questions.all()]
+        all_questions = Question.objects.exclude(id__in=[question.id for question in questions])
+        print(questions)
+        return render(request, 'accounts/edit_quiz.html', {
+            'quiz': quiz,
+            'questions': questions,
+            'all_questions': all_questions,
+            'CATEGORY_CHOICES': CATEGORY_CHOICES,
+        })
+    
+    elif request.method == 'POST':
+        data = json.loads(request.POST['data'])
+        files = request.FILES
+        quiz.title = data['testName']
+        quiz.category = data['category']
+        quiz.is_random = data['isRandom']
+        quiz.save()
+
+        quiz.quiz_questions.all().delete()
+
+        for question_index, question_data in enumerate(data['questions']):
+            question_id = question_data['id']
+            question = Question.objects.get(pk=question_id)
+            question.text = question_data['text']
+            question.explanation = question_data.get('explanation', '')
+
+            image_key = f'questions[{question_index + 1}][image]'
+            if image_key in files:
+                image_file = files.get(image_key)
+                if image_file:
+                    question.image = image_file
+            elif f'questions[{question_index + 1}][image_removed]' in request.POST:
+                question.image = None
+
+            question.save()
+
+            quiz.quiz_questions.create(question=question)
+
+            for answer_data in question_data['answers']:
+                answer_obj = Answer.objects.get(id=answer_data['id'])
+                answer_obj.text = answer_data['text']
+                answer_obj.is_correct = answer_data['is_correct']
+                answer_obj.save()
+
+        return JsonResponse({'message': 'Тест успішно оновлено!'}, status=201)
+
+
+@staff_login_required
 def add_question(request):
     if request.method == 'POST':
         quiz_ids = request.POST.getlist('quiz_ids')
@@ -174,6 +247,49 @@ def add_question(request):
 
 
 @staff_login_required
+def edit_question(request, question_id):
+    question = get_object_or_404(Question, id=question_id)
+    if request.method == 'POST':
+        quiz_ids = request.POST.getlist('quiz_ids')
+        text = request.POST.get('text')
+        explanation = request.POST.get('explanation', '')
+        image = request.FILES.get('image', None)
+        correct_answer = request.POST.get('correct_answer')
+        answers = request.POST.getlist('answers[]')
+
+        if not quiz_ids or not text or not correct_answer or len(answers) < 2:
+            return JsonResponse({'error': 'Усі поля мають бути заповнені'}, status=400)
+
+        question.text = text
+        question.explanation = explanation
+        question.image = image
+        question.save()
+
+        question.quiz_questions.all().delete()
+        quizzes = Quiz.objects.filter(id__in=quiz_ids)
+        for quiz in quizzes:
+            quiz.quiz_questions.create(question=question)
+
+        existing_answers = list(question.answers.all()) 
+
+        for i, answer_text in enumerate(answers, start=1):
+            if i <= len(existing_answers):
+                existing_answer = existing_answers[i - 1]
+                existing_answer.text = answer_text
+                existing_answer.is_correct = (str(i) == correct_answer)
+                existing_answer.save()
+        return JsonResponse({'message': 'Питання оновлено успішно!'}, status=200)
+
+    quizzes = Quiz.objects.all()
+    question_quizzes = question.quiz_questions.values_list('quiz_id', flat=True)
+    return render(request, "accounts/edit_question.html", {
+        "question": question,
+        "quizzes": quizzes,
+        "question_quizzes": question_quizzes,
+    })
+
+
+@staff_login_required
 def delete_question(request, question_id):
     question = get_object_or_404(Question, id=question_id)
     question.delete_question()
@@ -183,6 +299,17 @@ def delete_question(request, question_id):
 @method_decorator(staff_login_required, name='dispatch')
 class QuestionList(ListView):
     context_object_name = 'questions'
-    paginate_by = 15
+    paginate_by = 8
     model = Question
     template_name = 'accounts/question_list.html'
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        queryset = queryset.order_by('created_at')
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['quizzes'] = Quiz.objects.all()
+
+        return context

@@ -14,7 +14,7 @@
             <div class="card shadow-sm h-100 d-flex flex-column">
                 <div class="card-body d-flex flex-column">
                     <h5 class="card-title">{{ quiz.title }}</h5>
-                    <p class="card-text">Категорія прав: {{ quiz.get_category_display }}</p>
+                    <p class="card-text">Кількість питань: {{ quiz.quiz_questions.count }}</p>
                     <div class="mt-auto">
                         <button id="quiz-{{ quiz.pk }}-btn" class="auth-btn w-100">Пройти тестування</button>
                     </div>

@@ -1,0 +1,141 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Редагування питання :: {{ block.super }}
+{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card p-4 mb-5 mt-4">
+            <h2 class="auth-title">Редагування питання</h2>
+            <form id="questionForm" enctype="multipart/form-data">
+                <input type="hidden" name="question_id" value="{{ question.id }}">
+
+                <div class="mb-3">
+                    <label for="testSelect" class="form-label">Оберіть тести:</label>
+                    <select id="testSelect" name="quiz_ids" class="form-select" multiple required>
+                        {% for quiz in quizzes %}
+                        <option value="{{ quiz.id }}" {% if quiz.id in question_quizzes %}selected{% endif %}>{{ quiz.title }}</option>
+                        {% endfor %}
+                    </select>
+                    <small class="form-text text-muted">Утримуйте Ctrl (або Cmd на Mac), щоб обрати декілька тестів.</small>
+                </div>
+
+                <div class="mb-3">
+                    <label for="questionText" class="form-label">Текст питання:</label>
+                    <textarea id="questionText" name="text" class="form-control" rows="3" required>{{ question.text }}</textarea>
+                </div>
+
+                <div class="mb-3">
+                    <label for="explanation" class="form-label">Пояснення:</label>
+                    <textarea id="explanation" name="explanation" class="form-control" rows="2">{{ question.explanation }}</textarea>
+                </div>
+
+                <div class="mb-3">
+                    <label for="image" class="form-label">Зображення (додатково):</label>
+                    <div id="imageContainer">
+                        {% if question.image %}
+                        <div id="imagePreviewContainer">
+                            <div class="mb-2">
+                                <img id="imagePreview" src="{{ question.image.url }}" alt="Зображення" style="max-width: 50%; height: auto;">
+                            </div>
+                            <div class="mb-2">
+                                <button type="button" class="btn btn-danger" id="deleteImageBtn">Видалити</button>
+                            </div>
+                        </div>
+                        {% endif %}
+                        <input type="file" id="image" name="image" class="form-control">
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Варіанти відповідей:</label>
+                    <div id="answersContainer">
+                        {% for answer in question.answers.all %}
+                        <div class="input-group mb-2">
+                            <div class="input-group-text">
+                                <input type="radio" name="correct_answer" value="{{ forloop.counter }}" {% if answer.is_correct %}checked{% endif %}>
+                            </div>
+                            <input type="text" name="answers[]" class="form-control" value="{{ answer.text }}" required>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <div class="text-end">
+                    <button type="submit" class="btn choose-btn">Оновити</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.getElementById('deleteImageBtn')?.addEventListener('click', () => {
+            document.getElementById('imagePreviewContainer').remove();
+            const fileInput = document.getElementById('image');
+            fileInput.value = '';
+
+    });
+
+    document.getElementById('image').addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function (event) {
+                const oldImagePreview = document.getElementById('imagePreviewContainer');
+                if (oldImagePreview) {
+                    oldImagePreview.remove();
+                }
+
+                const imgElement = document.createElement('img');
+                imgElement.src = event.target.result;
+                imgElement.style.maxWidth = '50%';
+                imgElement.style.height = 'auto';
+
+                const imageContainer = document.getElementById('imageContainer');
+                
+                const newImagePreviewContainer = document.createElement('div');
+                newImagePreviewContainer.id = 'imagePreviewContainer';
+                newImagePreviewContainer.classList.add('mb-2');
+                newImagePreviewContainer.innerHTML = `
+                    <div>
+                        <img id="imagePreview" src="${event.target.result}" alt="Зображення" style="max-width: 50%; height: auto;">
+                    </div>
+                    <div class="mb-2">
+                        <button type="button" class="btn btn-danger" id="deleteImageBtn">Видалити</button>
+                    </div>
+                `;
+
+                imageContainer.insertBefore(newImagePreviewContainer, imageContainer.querySelector('input[type="file"]'));
+                document.getElementById('deleteImageBtn').addEventListener('click', () => {
+                        document.getElementById('imagePreviewContainer').remove();
+                        const fileInput = document.getElementById('image');
+                        fileInput.value = '';
+                });
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+
+    document.getElementById('questionForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const formData = new FormData(e.target);
+        const response = await fetch('', {
+            method: 'POST',
+            body: formData
+        });
+
+        if (response.ok) {
+            window.location.href = '/accounts/questions/';
+        } else {
+            const errorData = await response.json();
+            console.log(errorData.error || 'Сталася помилка');
+        }
+    });
+</script>
+
+
+{% endblock %}

@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block title %}
 Регулювальник :: {{ block.super }}
@@ -8,6 +9,84 @@
 <div class="container mt-5">
     <h2 class="text-center mb-4">Регулювальник</h2>
 
+    <div class="row justify-content-center">
+        <div class="col-md-10">
+            <div class="card p-4 mb-5 mt-4 shadow-lg rounded">
+
+                <div class="pdr_chapter_item">
+                    <div class="content">
+                    <p><b>Регулювання дорожнього руху</b></p>
+                    <p>Зазвичай дорожній рух регулюється світлофорами, дорожніми знаками та розміткою, але іноді на жвавих перехрестях можна зустріти інспектора регулювальника, який показує жестами напрямок руху для пішоходів та водіїв. Це може статися у випадку ДТП, через яку частково перекрито дорогу, через сильні затори, особливо у час-пік, через перекритий з певних причин рух або несправність світлофорів.</p>
+                    <p>Регулювальник – не дуже часте явище на дорогах, тож його поява може викликати метушню та невпевненість навіть у досвідчених водіїв. Зараз, втім, їх можна побачити на наших дорогах все частіше через постійні відключення електрики. Аби зорієнтуватися у ситуації та не розгубитися, особливо в темну пору доби, треба добре знати сигнали, які подають співробітники Дорожньої патрульної служби усім учасникам дорожнього руху.</p>
+                    <p><b>Хто такий регулювальник</b></p>
+                    <p>Отже, хто такий регулювальник? Це посадова особа, яка має повноваження керувати рухом автотранспорту за допомогою обумовлених у правилах жестів. Він повинен бути одягнений у формений одяг, мати знак або екіпірування.</p>
+                    <p>В уяві багатьох водіїв регулювальниками зазвичай є співробітники поліції. Проте ПДР передбачає, що у цій ролі можуть виступати й інші посадові особи:</p>
+  
+                    <ol>
+                    <li>працівники підрозділів транспортної безпеки на окремих ділянках доріг;</li>
+                    <li>працівники дорожніх служб;</li>
+                    <li>співробітники військової автоінспекції;</li>
+                    <li>чергові залізничних переїздів та поромних переправ,</li>
+                    </ol>
+
+                    <p>які мають відповідне посвідчення та нарукавну пов'язку, жезл, диск з червоним сигналом чи світлоповертачем, червоний ліхтар або прапорець та виконують регулювання у форменому одязі.</p>
+
+                    <p><b>Правило регулювальника</b></p>
+
+                    <p>Регулювальник скасовує дію сигналів світлофорів та знаків пріоритету. Дорожні знаки та розмітка продовжують діяти. У виняткових випадках регулювальник може відправити водія під заборонні знаки або розмітку. Зазвичай це пов'язано з проведенням ремонтних робіт, проведенням заходів або великою аварією.</p>
+
+                    <p>Втім іноді ручне регулювання застосовується, коли працюють усі світлофори, а затор навіть не почав утворюватись. Зазвичай це найважливіші перехрестя міської дорожньо-транспортної системи. У цьому випадку регулювальник застосовується для подвійного контролю транспортних потоків, тобто на випадок, якщо налаштовані світлофори не впораються. Регулювальник може візуально оцінити щільність різних потоків і приділити більше часу для проїзду одному з них. Світлофори поки що не здатні робити це так, як може людина.</p>
+
+                    <p>Отже, найважливіше правило: регулювальник – головніше сигналів світлофора, дорожніх знаків та розміток. Якщо він стоїть на дорозі – слухатись треба лише його!</p>
+                    <p><b>Сигнали регулювальника</b></p>
+                    <p>Як написано в пункті 8.8 ПДР, «Сигналами регулювальника є положення його корпусу, а також жести руками, у тому числі з жезлом або диском із червоним світлоповертачем».</p>
+                    <p>Насправді, у регулювальника не так багато сигналів, тому не доведеться їх довго запам'ятовувати. Їх всього три - і водій бачить їх з різних боків перехрестя:</p>
+                    <ol>
+                    <li>одна рука вгору (рух заборонено в усіх напрямках);</li>
+                    <li>обидві руки розведені в бік або опущені вниз (рух заборонено на спину та на обличчя);</li>
+                    <li>права рука витягнута вперед (рух заборонено на праве плече та на спину).</li>
+                    </ol>
+                    <p>Якщо говорити простими словами, заборонено їхати на обличчя та спину інспектору, а також перетинати напрямок, вказаний рукою</p>
+                    <p>А тепер детально та наочно:</p>
+                    <p><b><i>Одна рука вгору</i></b></p>
+                    <p>Якщо інспектор підняв праву руку вгору, незалежно від того, якою частиною корпусу він до вас повернутий: усім без винятку учасникам дорожнього руху – транспортним засобам, трамваям, пішоходам – категорично заборонено рухатися у будь-яких напрямках. Такий сигнал головним чином застосовується для розчищення перехрестя, щоб пропустити спецтранспорт.</p>
+                    
+                    <img src="{% static 'img/regulator1.jpg' %}" class="w-50">
+
+                    <p><b><i>Обидві руки розведені в бік або опущені вниз</i></b></p>
+                    <p>Це два однакові жести, що забороняють рух на спину та на обличчя усім учасникам дорожнього руху. Для тих, хто знаходиться з боків: автомобілі тільки прямо та праворуч, трамвай тільки прямо, пішоходам можна переходити дорогу.</p>
+                    
+                    <p><img src="{% static 'img/regulator2.jpg' %}" class="w-50"></p>
+                    <p><img src="{% static 'img/regulator3.jpg' %}" class="w-50"></p>
+                    <p><img src="{% static 'img/regulator5.jpg' %}" class="w-50"></p>
+
+                    <p><b><i>Права рука витягнута вперед </i></b></p>
+                    <p>Цей жест треба розбирати детальніше, бо він є найзаплутанішим та має чотири значення для всіх учасників дорожнього руху.</p>
+                    <ol>
+                    <li>Для тих, хто знаходиться зі сторони правого плеча: транспортним засобам та трамваям рух заборонено, пішоходам можна переходити дорогу.</li>
+                    <li>Для тих, хто знаходиться зі спини: аналогічно - транспортним засобам та трамваям рух заборонено, пішоходам можна переходити дорогу.</li>
+                    <li>Для тих, хто знаходяться зі сторони лівого боку: транспортним засобам дозволено рухатися у будь-якому напрямку, трамваям дозволено повертати ліворуч, пішоходам заборонено переходити дорогу.</li>
+                    <li>Для тих, хто знаходиться спереду: транспортним засобам дозволено рухатися праворуч, трамваям - лише праворуч, пішоходам заборонено переходити дорогу.</li>
+                    </ol>
+                    
+                    <p><img src="{% static 'img/regulator5.jpg' %}" class="w-50"></p>
+                    <p><img src="{% static 'img/regulator6.jpg' %}" class="w-50"></p>
+                    <p><img src="{% static 'img/regulator7.jpg' %}" class="w-50"></p>
+                    <p><img src="{% static 'img/regulator8.jpg' %}" class="w-50"></p>
+
+                    <p><b>Незвичайні сигнали</b></p>
+                    <p>У незвичайних ситуаціях регулювальник може подавати сигнали, які не описані у правилах дорожнього руху. Таке може бути, наприклад, при оточенні території через проведення масштабного заходу або при великій транспортній пригоді.</p>
+                    <p>Також багато інспекторів розуміють, що далеко не всі водії пам'ятають пункти правил дорожнього руху. Більше того, у правилах зазначено, що регулювальник має право застосовувати інші жести та сигнали, зрозумілі водіям.</p>
+                    <p><b>Сигнал свистком</b></p>
+                    <p>Це додатковий засіб, який застосовується для привернення уваги водіїв. Наприклад, якщо при забороні руху автомобіль продовжить свій шлях, інспектор покаже заборонний жест і одночасно приверне увагу водія звуковим сигналом.</p>
+                    <p><img class="" src="data:image/webp;base64,UklGRnoLAABXRUJQVlA4IG4LAABQSACdASosASwBPpFInkwlpCKiobUZgLASCWlu4XHOQBnZqyVY3gr+e8COzv2dzHQmzKb+32LM8h/oftL6PPrz2EPLH9o37cCaO71jd6xu9Y3esbvWN3rG71jd6xu9Y3esbvWN3rG71jd6xu9Y3esbvU0Jt5r5SV3g47wcZ0ZpuYKTlUQcRU/3ytEd9cIbE1oLKzJAgpoh0Kt/sd6pMtFdx4ncbyZ6fYNJe9qxJbrCY/6m2aEp6pSLAQgr5EG70wS2ZjBkhetKFknYZagFH4LOGt6JkTuZ3BPPnTgOTr0oShWa15n0zzLBwCdM3NQlEbjkgWYKnphJRYNbUmQ1XB9tgjlt/UVkPLewFrFTMNWvUSXj8IdkeRUNsTxfPB0EuzaVUSTziw3apMv9NP3j1qPkH0C2XoCMov50yFTxGPTTq10axgBKTICLyoHKbMU4yCZ0y3U99yR4ShUXh9fLRrMjmLqeZe2EsvZnZAKJzMUrhFG3cxi3ZdntcHHUsliDLt87Seg0TikfNWQoYXOyPMvlkGssLy2p6e3nM7EfZZmIvzCqjaUmbKUzFIN5rU4OoqaZmnnUhQj1COnN3NHK+jEzsVZTGfdAefjo+kb44R+Ww2qtTPKTyL8NNodcX48CcUiYg+HSZ9u98R4ypguDkj/VkvrtKmSjPwdYRKFQJ2QE7IBYv5/yfZmjSJ/uLzTaViW5BQb1GONvIO52DjvBx3g3R1ZvIC8dNM9Vsh9HmSwvto5fiLG71jd6xu9Y3esbvWN3rG71jd6xu9Y1YAD+9g0AAACNC5Z8lN881oSwk+w6b7+X05ToHALU+F26KpCulcPfkMSWOxoWRldlW3lhRB0M16l+fR37/5KDIEi1+6v1bEpb57GsX7DHS/raC3g925jg6cE7oIe9d53D5JEyrhr+3mBziDeVrw4Nw+bvTHJoY1FAK2aIgMh+SaZDVukC17c7mQUr+6MSqcYH0zy7IVp00zN7XeosX3cYSkR7qPgPuXUFa5goZu97XjqU9RIJZ/RLqQRckNlR9ibMtt5D0sLeRC/VMfnCF1kfbyxSfxakyPaHCx21HLgBSkvRqNqdX79dB7i92sO6iHnRGvlpk/viVJkXzezgDaKEpthsTNKAkAPdhfBLr9wznISRO32pYN6549SgzSmygMQSjBDdNUKQCUaMcUTBptLU8XYJ0GQJIzNIk4mWde9pb4C1KZJIopLQaRZ02OVP6XQxj2ooO1wD29scX+oQ3jPl011FPqgVRKJ8sZARYzXu5Af33b5THGKk7H1ktwTDlh0CfzzV0aZrp0qc0c7GZldfivT9u6J4mzYWjWjpdBhEukBrFdxneJVgOEhp1Iw8Lza8b9mvy7XMy7YrcrM779e12Pdb1rUop6Vd+UdrhPt+CcCJShH1nnem4yXumEHNhDL/JQMJqzKD2CjZQmI0bHCOvv4D4QD25J6jtusCuJdXD3+xzqtHs27/Oupt7UssVRhkMLqnrL3BIgQpZnohnL4aNsDuG4bo9WOEilTtj5dP8DxTgjuIYfUdEq35sdEcvLk/7qgsBb0M72IUo5F7jmNVDbMeuggcytxNEqCJuWw2sFiA0h/UTO07UR6mpfEZ31uqKdwq6UYaNBiaBGE6LAADz2Kr4sEWcYNJZ8nfXovCwYXPCf0+KF2G04B+rL1hqQ8ttGc7IYkagZnnaaa0QK6nbvzfWJN4NdJA5qnxh7mUCcWBrE5CrWYfcpD9n5k49kS3qtTZL0ge37DqZa4c9Ct3YotzIwzzOpbjsyG8G5jqMpssQW1+6AxmMgxXmx33UZbOWdFKqmqqQW1Cun/xFt/BkD4W+7sfwG0C4szvWfPuGY97wgaq1roTP2WHjI+5cmRpVYN2KcBtFEyU2RXc06UP3PewfMSdjBFsbXYKiTzGUijUbkpdp2sZYLqc74y+Xhd9y9fbfEAl5419aw7yp8MixDaj2wyxwndGBkayFoBo5A5rGuOv1lEjygD2NPIMHif0C2XaM98c6nFSkq1edYvtAmuY0hN1U42pO735RLpa03l6Jf6FXiCt08NbstanszWjp68zc7u1/kD7SA3351DX4bcxyPfDzfxALUUOKrQOoYT2OWfD2aZ3YzFzbnJUTAUI6AtPViLUzw4Evg00K3X4+BvEhIkWTeiR7fi6c4/H/8/pfSaRMmXxFnFpM3qSl1LiADXaCObPk+3V2q2hyWVR9Hn5rX5zrZoaBdZezB7OGNSgTLIdn2euHO5aZq1cinHUpo1ArWh7qOKAbUf5GgeAzGfGdKJ6Mb3KvyqExW540EJthzCLFge7BGBd7/Ly+xhzv9Hbg0/IHK2NiHPFCDTZk08AHKdqvKLxL1Pd5j8Mi6ENIhB6R8JBp7zrSyOvQdORZS5LuGop1MW0F8+btKVd+bTqz4eDeI/eV2PxRy2fqvt3XXp2Qer9Q50NLmGY08jf5+0Av4rpYvv9LJlJFFcLMKoIsae+wryXb3HTyLs8Ri77hGDcYk61YyS1GUFDDfNkC5JI5vEwpp3pqEMM9whYDO8o+f6JLss+tpXg1XKAEcp3wU63GzjR3vZRWw0v4ZQg4hZaTxYtDdLBI0OznsR8c6aKEpOscPmgfKoYDN1bd23v/mBY8OTLq4IGP7hIxshMS2x6QRh1CEKyQHHHy953KRdPr+9doquKAcO5upeG5M7Y0rtf9kJmm9bqucMmzwGaiaTtDmpKYRPhi0la1Sgz9tRcj2lTO+WZjUo1nWRLXZIOlZ475yLwtASpeMeHDOQTVu/UsX1Jduc5NTbuuUwyTnSAEdqzK4A7iC3ue+MpVVTD9ovpTkRXXiffcMaAJzo2p0rBJBMoaCwv6K8UAmfpoXCwWZALWZHCtod5dECw7Nll43D+tmEX5kyJ/w2/+1pLEo7zJwaWbysEbIayv32LdqKmQ6OxmO5FgrLUCoeH/aYIHIXLmMD72YJ+3WfZHQehmvA3+s+/c6NlPbxKGW2bkH8aZzKqVjKyHB7Dv1AD50nKps4+cWzNyMo6Bvrk5W5uctC2ZQmGnN0Dz6AsKPXIK5mNi+y4+5duIAnbWPdOy3x7F/L0JIoDmYhPm39OIh5IoiAEaIEl8xiT7MsFOjwCaKQ7LgGkLrjkS/f+hpmTWFwG71pyvvmypTEzEY5YxzJVvCC6GF0VPaP/iPJNRpAVvhKPqBoHwQH2aOVY8dfVqQVpzxls/axOgI65FuiuRUwiiBksttvhrfu0eER9od8b8iM/42kN/KRv+DgIZwc6SVDUnP3vKellOJC2jYoBoS8+1oRs3c/1c1+mkQav5r9Zsrg5i4Q1couVaI2EW0NmLH8U4UAoOap/I+1DRtDVHauKueWClOFzhUZCFgACEJtg4T0FwkhNhxdLCfZaE4dhcXViP6NL11uw471hKPR+kGugRxkw4qXxsiEoDM3J08DakB1WK1eUVCpBLAGx4/ykfahcl/hzqxvqQkF/+lPZTduriRAPcJM1LE6BNup6gDrPDdswLxmenFeyEMOwWGF3bIFRysPXrAjOEoxS/ThKgZtL+6soCqUbMGcbpA7OKpGCaICxlxGYbKzuC3un7jW3izf3YDGM/78BSrt5UyEOE5gG3Oiv69sTKJMQ/gDqt+se2cKSYRPctwQvKG5QdqgR/gkBJnchTQe3H1QaK2WtUQcMmTVq+Q/Hfn4mCt9iQcpokkRjf+uWF+6L9mX+5fZ3mxlBtgLOhuCkAc0c9+2KIqe9OZkPQ4ojBRfvoBEYWP+xklHk7yDj3usjjfPEgxeRtN2R8fleoZbUeaifsH7NPF4uZihrIv3y/6jhOw97+hsnlN64epxcLsQlZ/auKcZ1OI5HXMO+7aJ9cTdfeArB+amX6ite0iWU87IQtYh171D/PL+m/mctvs3b6msslJkUk+QAAAAA" alt="" data-pagespeed-url-hash="1334647588" onload="pagespeed.CriticalImages.checkImageForCriticality(this);"></p>
+                    <p>Дорожня мова жестів — один з найважливіших способів комунікації для водіїв. Знаючи та застосовуючи на практиці умовні сигнали, можна уникнути не однієї неприємної пригоди на дорозі.</p>
+                    </div>
+                    </div>
+
+            </div>
+        </div>
+    </div>
 </div>
 {% endblock %}
 

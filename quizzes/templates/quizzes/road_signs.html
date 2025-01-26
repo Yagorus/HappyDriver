@@ -1,0 +1,192 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+Дорожні знаки :: {{ block.super }}
+{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="text-center mb-4">Дорожні знаки</h2>
+
+    <div class="accordion" id="roadSignsAccordion">
+        <div class="card">
+            <div class="card-header" id="headingOne">
+                <h4 class="mb-0">
+                    <div class="toggle-header" data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                        Попереджувальні знаки
+                    </div>
+                </h4>
+            </div>
+
+            <div id="collapseOne" class="collapse" aria-labelledby="headingOne">
+                <div class="card-body">
+                    <p>Попереджувальні знаки інформують водіїв про наближення до небезпечної ділянки дороги і характер небезпеки.
+                        Під час руху по цій ділянці необхідно вжити заходів для безпечного проїзду.</p>
+                    <div class="text-center">
+                        <img src="{% static 'img/road_signs1.jpg' %}" class="w-90">
+                        <img src="{% static 'img/road_signs2.jpg' %}" class="w-90">
+                        <img src="{% static 'img/road_signs3.jpg' %}" class="w-90">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header" id="headingTwo">
+                <h4 class="mb-0">
+                    <div class="toggle-header collapsed" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                        Знаки пріоритету
+                    </div>
+                </h4>
+            </div>
+
+            <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo">
+                <div class="card-body">
+                    <p>Знаки пріоритету встановлюють черговість проїзду перехресть, перехрещень проїзних частин або 
+                        вузьких ділянок дороги.</p>
+                    <div class="text-center">
+                        <img src="{% static 'img/road_signs4.jpg' %}" class="w-90">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header" id="headingFour">
+                <h4 class="mb-0">
+                    <div class="toggle-header collapsed" data-toggle="collapse" data-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                        Заборонні знаки
+                    </div>
+                </h4>
+            </div>
+
+            <div id="collapseFour" class="collapse" aria-labelledby="headingFour">
+                <div class="card-body">
+                    <p>
+                        Заборонні знаки запроваджують або скасовують певні обмеження в русі.
+                    </p>
+                    <div class="text-center">
+                        <img src="{% static 'img/road_signs5.jpg' %}" class="w-90">
+                        <img src="{% static 'img/road_signs6.jpg' %}" class="w-90">
+                        <img src="{% static 'img/road_signs7.jpg' %}" class="w-90">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header" id="headingThree">
+                <h4 class="mb-0">
+                    <div class="toggle-header collapsed" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                        Наказові знаки
+                    </div>
+                </h4>
+            </div>
+
+            <div id="collapseThree" class="collapse" aria-labelledby="headingThree">
+                <div class="card-body">
+                    <p>
+                        Наказові знаки показують обов’язкові напрямки руху або дозволяють деяким категоріям учасників рух по проїзній
+                         частині чи окремих її ділянках, а також запроваджують або скасовують деякі обмеження.
+                    </p>
+                    <div class="text-center">
+                        <img src="{% static 'img/road_signs8.jpg' %}" class="w-90">
+                        <img src="{% static 'img/road_signs9.jpg' %}" class="w-90">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header" id="headingFive">
+                <h4 class="mb-0">
+                    <div class="toggle-header collapsed" data-toggle="collapse" data-target="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
+                        Інформаційно-вказівні знаки
+                    </div>
+                </h4>
+            </div>
+        
+            <div id="collapseFive" class="collapse" aria-labelledby="headingFive">
+                <div class="card-body">
+                    <p>
+                        Інформаційно-вказівні знаки запроваджують або скасовують певний режим руху,
+                         а також інформують учасників дорожнього руху про розташування населених пунктів, різних об’єктів, територій, де діють спеціальні правила
+                    </p>
+                    <div class="text-center">
+                        <img src="{% static 'img/road_signs10.jpg' %}" class="w-90">
+                        <img src="{% static 'img/road_signs11.jpg' %}" class="w-90">
+                        <img src="{% static 'img/road_signs12.jpg' %}" class="w-90">
+                        <img src="{% static 'img/road_signs13.jpg' %}" class="w-90">
+                        <img src="{% static 'img/road_signs14.jpg' %}" class="w-90">
+                        <img src="{% static 'img/road_signs15.jpg' %}" class="w-90">
+                        <img src="{% static 'img/road_signs16.jpg' %}" class="w-90">
+                        <img src="{% static 'img/road_signs17.jpg' %}" class="w-90">
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header" id="headingSix">
+                <h4 class="mb-0">
+                    <div class="toggle-header collapsed" data-toggle="collapse" data-target="#collapseSix" aria-expanded="false" aria-controls="collapseSix">
+                        Знаки сервісу
+                    </div>
+                </h4>
+            </div>
+        
+            <div id="collapseSix" class="collapse" aria-labelledby="headingSix">
+                <div class="card-body">
+                    <p>
+                        Знаки сервісу інформують учасників дорожнього руху про розташування об'єктів обслуговування.
+                    </p>
+                    <div class="text-center">
+                        <img src="{% static 'img/road_signs18.jpg' %}" class="w-90">
+                        <img src="{% static 'img/road_signs19.jpg' %}" class="w-90">
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header" id="headingSeven">
+                <h4 class="mb-0">
+                    <div class="toggle-header collapsed" data-toggle="collapse" data-target="#collapseSeven" aria-expanded="false" aria-controls="collapseSeven">
+                        Таблички до дорожніх знаків
+                    </div>
+                </h4>
+            </div>
+        
+            <div id="collapseSeven" class="collapse" aria-labelledby="headingSeven">
+                <div class="card-body">
+                    <p>
+                        Таблички до дорожніх знаків уточнюють або обмежують дію знаків, разом з якими вони встановлені.
+                    </p>
+                    <div class="text-center">
+                        <img src="{% static 'img/road_signs20.jpg' %}" class="w-90">
+                        <img src="{% static 'img/road_signs21.jpg' %}" class="w-90">
+                        <img src="{% static 'img/road_signs22.jpg' %}" class="w-90">
+                        <img src="{% static 'img/road_signs23.jpg' %}" class="w-90">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const headers = document.querySelectorAll('.toggle-header');
+        headers.forEach(header => {
+            header.addEventListener('click', () => {
+                const target = document.querySelector(header.dataset.target);
+                target.classList.toggle('show');
+            });
+        });
+    });
+</script>
+{% endblock %}

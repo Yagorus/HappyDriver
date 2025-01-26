@@ -1,6 +1,7 @@
 from datetime import date, datetime
 from django.shortcuts import render, get_object_or_404, redirect
 from accounts.utils import custom_login_required
+from accounts.models import CustomUser
 from .models import Quiz, Question, Answer, UsersQuizzes, Result
 from accounts.models import Subscription
 from django.http import JsonResponse
@@ -14,6 +15,21 @@ load_dotenv()
 your_public_key = os.getenv('your_public_key')
 your_private_key = os.getenv('your_private_key')
 
+
+def home_page(request):
+    users_= CustomUser.objects.all().count()
+    questions = Question.objects.all().count()
+    quizzes = Quiz.objects.all().order_by('-created_at')
+    latest_quiz = quizzes[0] if quizzes else None
+    context = {
+            'users_count': users_,
+            'questions_count': questions,
+            'quizzes': quizzes,
+            'latest_quiz': latest_quiz.title,
+        }
+    return render(request, "home.html", context)
+
+
 @custom_login_required
 def get_topic_quizzes(request):
     quizzes = Quiz.objects.filter(category="ALL", is_random=False)
@@ -22,7 +38,7 @@ def get_topic_quizzes(request):
 
 @custom_login_required
 def get_category_quizzes(request, category):
-    quizzes = Quiz.objects.filter(category=category)
+    quizzes = Quiz.objects.filter(is_random=False, category__in=["ALL", category]).order_by('-created_at')
     return render(request, "quizzes/quizzes.html", {'quizzes': quizzes, 'title': 'Тести ПДР по категоріях прав'})
 
 

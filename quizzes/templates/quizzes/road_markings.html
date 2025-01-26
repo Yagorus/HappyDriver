@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+Дорожня розмітка :: {{ block.super }}
+{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="text-center mb-4">Дорожня розмітка</h2>
+
+    <div class="accordion" id="roadSignsAccordion">
+
+        <div class="card">
+            <div class="card-header" id="headingOne">
+                <h4 class="mb-0">
+                    <div class="toggle-header" data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                        Горизонтальна розмітка
+                    </div>
+                </h4>
+            </div>
+
+            <div id="collapseOne" class="collapse" aria-labelledby="headingOne">
+                <div class="card-body">
+                    <div class="text-center">
+                        <img src="{% static 'img/road_markings1.jpg' %}" class="w-90">
+                        <img src="{% static 'img/road_markings2.jpg' %}" class="w-90">
+                        <img src="{% static 'img/road_markings3.jpg' %}" class="w-90">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header" id="headingTwo">
+                <h4 class="mb-0">
+                    <div class="toggle-header collapsed" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                        Вертикальна Розмітка
+                    </div>
+                </h4>
+            </div>
+
+            <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo">
+                <div class="card-body">
+                    <div class="text-center">
+                        <img src="{% static 'img/road_markings4.jpg' %}" class="w-90">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const headers = document.querySelectorAll('.toggle-header');
+        headers.forEach(header => {
+            header.addEventListener('click', () => {
+                const target = document.querySelector(header.dataset.target);
+                target.classList.toggle('show');
+            });
+        });
+    });
+</script>
+{% endblock %}

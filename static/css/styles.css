@@ -172,3 +172,20 @@ h1, h2, h3 {
 canvas {
     height: 250px ! important;
 }
+
+.tpl_fine {
+    border: 1px solid #592e63;
+    padding: 10px;
+    border-radius: 0.25rem;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.fine_name {
+    font-weight: 500;
+    font-size: 20px;
+}
+
+.fine_amount {
+    color: #592e63;
+    font-weight: 500;
+}

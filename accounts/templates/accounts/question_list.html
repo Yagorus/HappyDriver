@@ -5,8 +5,8 @@
 {% endblock %}
 
 {% block content %}
-<div class="row justify-content-center">
-    <div class="col-md-11">
+<div class="container mt-4 d-flex justify-content-center">
+    <div class="col-md-12">
         <div class="card p-4 mb-5 mt-4">
             <h2 class="auth-title">Список питань</h2>
 
@@ -14,17 +14,16 @@
         <table class="table table-striped">
             <thead>
                 <tr>
-                    <th>#</th>
                     <th>Текст питання</th>
                     <th>Зображення</th>
                     <th>Пояснення</th>
+                    <th>Відповіді</th>
                     <th>Дії</th>
                 </tr>
             </thead>
             <tbody>
                 {% for question in questions %}
-                <tr>
-                    <td>{{ forloop.counter }}</td>
+                <tr data-id="{{ question.id }}">
                     <td>{{ question.text }}</td>
                     <td>
                         {% if question.image %}
@@ -33,7 +32,22 @@
                     </td>
                     <td>{{ question.explanation|default:"" }}</td>
                     <td>
-                        <a href="{% url 'delete_question' question.id %}" class="btn" style="color: red;"><i class="bi bi-trash3"></i></a>
+                        <ol>
+                            {% for answer in question.answers.all %}
+                            <li>
+                                <p class="{% if answer.is_correct %} text-success{% else %} text-danger{% endif %}"
+                                 data-id="{{ answer.id }}">
+                                    {{answer}}
+                                </p>
+                            </li>
+                            {% endfor %}
+                        </ol>
+                    </td>
+                    <td class="align-items-center">
+                        <a href="{% url 'edit_question' question.id %}" class="btn" style="color: orange;"><i class="bi bi-pencil-fill"></i></a>
+                        <button class="btn" style="color: red;" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal" data-id="{{ question.id }}">
+                            <i class="bi bi-trash3"></i>
+                        </button>
                     </td>
                 </tr>
                 {% endfor %}
@@ -45,5 +59,34 @@
 </div>
 </div>
 </div>
+
+<div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="confirmDeleteModalLabel">Підтвердження видалення</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Ви впевнені, що хочете видалити це питання?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Скасувати</button>
+                <a href="#" id="deleteConfirmBtn" class="btn btn-danger">Видалити</a>
+            </div>
+        </div>
+    </div>
 </div>
+
+<script>
+    const confirmDeleteModal = document.getElementById('confirmDeleteModal');
+    confirmDeleteModal.addEventListener('show.bs.modal', function (event) {
+        const button = event.relatedTarget;
+        const questionId = button.getAttribute('data-id');
+        const deleteUrl = `{% url 'delete_question' 0 %}`.replace('0', questionId);
+        const deleteConfirmBtn = document.getElementById('deleteConfirmBtn');
+        deleteConfirmBtn.setAttribute('href', deleteUrl);
+    });
+</script>
+
 {% endblock %}

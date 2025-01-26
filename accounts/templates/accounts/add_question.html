@@ -71,7 +71,7 @@
         });
 
         if (response.ok) {
-            window.location.href = '/';
+            window.location.href = '/accounts/questions/';
         } else {
             const errorData = await response.json();
             console.log(errorData.error || 'Сталася помилка');

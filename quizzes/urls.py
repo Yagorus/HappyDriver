@@ -1,7 +1,8 @@
 from django.urls import path
-from .views import add_subscription, pay, get_history_quizzes_results, submit_quiz_results, get_quiz, get_quizzes, get_topic_quizzes, get_category_quizzes, get_paper_quizzes, choose_quiz_category
+from .views import home_page, add_subscription, pay, get_history_quizzes_results, submit_quiz_results, get_quiz, get_quizzes, get_topic_quizzes, get_category_quizzes, get_paper_quizzes, choose_quiz_category
 
 urlpatterns = [
+    path('', home_page, name='home'),
     path('quizzes/', get_quizzes, name='get_quizzes'),
     path('choose-category/', choose_quiz_category, name='choose_quiz_category'),
     path('paper-quizzes/', get_paper_quizzes, name='get_paper_quizzes'),

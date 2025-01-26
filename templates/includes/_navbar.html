@@ -8,15 +8,16 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
 
+            {% if not request.user.is_staff %}
             <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
                data-bs-toggle="dropdown" aria-expanded="false">
                 Теорія ПДР
             </a>
             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                <li><a class="dropdown-item" href="">Правила дорожнього руху</a></li>
-                <li><a class="dropdown-item" href="">Дорожні знаки</a></li>
-                <li><a class="dropdown-item" href="">Дорожня розмітка</a></li>
+                <li><a class="dropdown-item" href="{% url 'pdr' %}">Правила дорожнього руху</a></li>
+                <li><a class="dropdown-item" href="{% url 'road_signs' %}">Дорожні знаки</a></li>
+                <li><a class="dropdown-item" href="{% url 'road_markings' %}">Дорожня розмітка</a></li>
                 <li><a class="dropdown-item" href="{% url 'theory_traffic_light' %}">Світлофор</a></li>
                 <li><a class="dropdown-item" href="{% url 'theory_regulator' %}">Регулювальник</a></li>
                 <li><a class="dropdown-item" href="{% url 'theory_fines' %}">Штрафи</a></li>
@@ -36,7 +37,7 @@
                 </li>
 
             <li class="nav-item"><a class="nav-link" href="/#contacts">Контакти</a></li>
-
+            {% endif %}
             {% if request.user.is_authenticated %}
                 <li class="nav-item"><a class="nav-link">|</a></li>
 
@@ -45,35 +46,24 @@
                 <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle profile" href="#" id="navbarDropdown5" role="button"
                    data-bs-toggle="dropdown" aria-expanded="false">
-                    Налаштування тестів
+                   Тестування
                 </a>
                 <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <li><a class="dropdown-item" href="{% url 'create_quiz' %}">Створити тест</a></li>
-                    <li><a class="dropdown-item" href="">Редагувати тест</a></li>
-                    <li><a class="dropdown-item" href="">Видалити тест</a></li>
+                    <li><a class="dropdown-item" href="{% url 'create_quiz' %}">Створити нове</a></li>
+                    <li><a class="dropdown-item" href="{% url 'quiz_list' %}">Список тестувань</a></li>
                 </ul>
                 </li>
                 
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle profile" href="#" id="navbarDropdown5" role="button"
                        data-bs-toggle="dropdown" aria-expanded="false">
-                        Налаштування питань
+                        Питання
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <li><a class="dropdown-item" href="{% url 'create_question' %}">Додати питання</a></li>
+                        <li><a class="dropdown-item" href="{% url 'create_question' %}">Додати нове</a></li>
                         <li><a class="dropdown-item" href="{% url 'question_list' %}">Список питань</a></li>
                     </ul>
                     </li>
-
-                <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle profile" href="#" id="navbarDropdown4" role="button"
-                   data-bs-toggle="dropdown" aria-expanded="false">
-                    Користувачі
-                </a>
-                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <li><a class="dropdown-item" href="">Додати помічника</a></li>
-                </ul>
-                </li>
 
                 {% else %}
                 <li class="nav-item">
