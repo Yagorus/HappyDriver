@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import home_page, add_subscription, pay, get_history_quizzes_results, submit_quiz_results, get_quiz, get_quizzes, get_topic_quizzes, get_category_quizzes, get_paper_quizzes, choose_quiz_category
+from .views import set_message, home_page, add_subscription, pay, get_history_quizzes_results, submit_quiz_results, get_quiz, get_quizzes, get_topic_quizzes, get_category_quizzes, get_paper_quizzes, choose_quiz_category
 
 urlpatterns = [
     path('', home_page, name='home'),
@@ -13,4 +13,5 @@ urlpatterns = [
     path('quiz/<int:quiz_id>/submit_results/', submit_quiz_results, name='submit_quiz_results'),
     path('pay/', pay, name='pay'),
     path('add_subscription/', add_subscription, name='add_subscription'),
+    path('set-message/', set_message, name='set_message')
 ]

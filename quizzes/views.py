@@ -12,6 +12,7 @@ from dotenv import load_dotenv
 import os
 from django.contrib import messages
 import random
+from django.utils import timezone
 
 
 load_dotenv()
@@ -116,7 +117,7 @@ def submit_quiz_results(request, quiz_id):
                 user_quiz=user_quiz,
                 answer=answer
             )
-        user_quiz.finished_at = datetime.utcnow()
+        user_quiz.finished_at = timezone.now()
         user_quiz.save()
         return JsonResponse({'message': 'Результати успішно відправлені!'})
 
@@ -165,19 +166,15 @@ def get_history_quizzes_results(request, pk, filter):
 def pay(request):
     subscriptions = Subscription.objects.filter(user=request.user).order_by("-finished_at")
     if not subscriptions or subscriptions[0].finished_at < date.today():
-        liqpay = LiqPay(public_key=your_public_key, private_key=your_private_key)
-        params = {
-            "action": "pay",
-            "amount": "300",
-            "currency": "UAH",
-            "description": "Pay for Subscription",
-            "order_id": "order123",
-            "version": "3",
-            "sandbox": 1,
-        }
-        html = liqpay.cnb_form(params)
-        return render(request, "quizzes/payment.html",
-                    {"html": html, "public_key": your_public_key, "private_key": your_private_key})
+        return render(request, "quizzes/payment.html")
 
     messages.success(request, "Ви вже активували підписку.")
     return redirect('home')
+
+
+def set_message(request):
+    if request.method == 'POST':
+        message = request.POST.get('message', '')
+        if message:
+            messages.error(request, message)
+        return JsonResponse({'status': 'success'})

@@ -10,6 +10,7 @@ from quizzes.models import Quiz, Question, Answer, UsersQuizzes, Result, CATEGOR
 from .utils import custom_login_required, staff_login_required
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
+from django.db import IntegrityError
 
 
 def signup(request):
@@ -141,31 +142,36 @@ def create_quiz(request):
         data = json.loads(request.POST['data'])
         files = request.FILES
 
-        quiz = Quiz.objects.create(
-            title=data['testName'],
-            category=data['category'],
-            is_random=data['isRandom']
-        )
-
-        for question_index, question_data in enumerate(data['questions']):
-            image_key = f'questions[{question_index}][image]'
-            image_file = files.get(image_key) if image_key in files else None
-
-            question = Question.objects.create(
-                text=question_data['text'],
-                explanation=question_data.get('explanation', ''),
-                image=image_file
+        try:
+            quiz = Quiz.objects.create(
+                title=data['testName'],
+                category=data['category'],
+                is_random=data['isRandom']
             )
-            quiz.quiz_questions.create(question=question)
 
-            for answer_data in question_data['answers']:
-                Answer.objects.create(
-                    question=question,
-                    text=answer_data['text'],
-                    is_correct=answer_data['is_correct']
+            for question_index, question_data in enumerate(data['questions']):
+                image_key = f'questions[{question_index}][image]'
+                image_file = files.get(image_key) if image_key in files else None
+
+                question = Question.objects.create(
+                    text=question_data['text'],
+                    explanation=question_data.get('explanation', ''),
+                    image=image_file
                 )
+                quiz.quiz_questions.create(question=question)
 
-        return JsonResponse({'message': 'Тестування створено!'}, status=201)
+                for answer_data in question_data['answers']:
+                    Answer.objects.create(
+                        question=question,
+                        text=answer_data['text'],
+                        is_correct=answer_data['is_correct']
+                    )
+        except IntegrityError:
+            return JsonResponse({'error': 'Тест із такою назвою вже існує!'}, status=400)
+        except Exception as e:
+            return JsonResponse({'error': 'Сталася помилка під час створення тесту!'}, status=500)
+        else:
+            return JsonResponse({'message': 'Тестування створено!'}, status=201)
 
 
 @staff_login_required
