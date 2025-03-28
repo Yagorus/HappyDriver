@@ -22,6 +22,26 @@ your_private_key = os.getenv('your_private_key')
 
 
 def home_page(request):
+    # Debug information
+    print("=== HOME PAGE VIEW CALLED ===")
+    try:
+        from quizzes.models import Quiz
+        latest_quiz = Quiz.objects.order_by('-created_at').first()
+        print(f"Latest quiz: {latest_quiz}")
+        all_quizzes = Quiz.objects.all()
+        print(f"All quizzes count: {all_quizzes.count()}")
+        for quiz in all_quizzes:
+            print(f"  - {quiz.id}: {quiz.title}")
+    except Exception as e:
+        print(f"Error in debug code: {e}")
+    # Debug information
+    print("=== HOME PAGE VIEW CALLED ===")
+    latest_quiz = Quiz.objects.order_by('-created_at').first()
+    print(f"Latest quiz: {latest_quiz}")
+    all_quizzes = Quiz.objects.all()
+    print(f"All quizzes count: {all_quizzes.count()}")
+    for quiz in all_quizzes:
+        print(f"  - {quiz.id}: {quiz.title}")
     users_= CustomUser.objects.filter(is_staff=False).count()
     questions = Question.objects.all().count()
     quizzes = Quiz.objects.filter(is_random=False).order_by('-created_at')
@@ -30,7 +50,7 @@ def home_page(request):
             'users_count': users_,
             'questions_count': questions,
             'quizzes': quizzes,
-            'latest_quiz': latest_quiz.title,
+            'latest_quiz': latest_quiz.title if latest_quiz else "No quizzes available" if latest_quiz else "No quizzes available" if latest_quiz else "No quizzes available" if latest_quiz else "No quizzes available" if latest_quiz else "No quizzes available" if latest_quiz else "No quizzes available" if latest_quiz else "No quizzes available" if latest_quiz else "No quizzes available" if latest_quiz else "No quizzes available" if latest_quiz else "No quizzes available" if latest_quiz else "No quizzes available" if latest_quiz else "No quizzes available" if latest_quiz else "No quizzes available" if latest_quiz else "No quizzes available" if latest_quiz else "No quizzes available" if latest_quiz else "No quizzes available" if latest_quiz else "No quizzes available" if latest_quiz else "No quizzes available" if latest_quiz else "No quizzes available" if latest_quiz else "No quizzes available" if latest_quiz else "No quizzes available" if latest_quiz else "No quizzes available" if latest_quiz else "No quizzes available" if latest_quiz else "No quizzes available" if latest_quiz else "No quizzes available" if latest_quiz else "No quizzes available" if latest_quiz else "No quizzes available" if latest_quiz else "No quizzes available" if latest_quiz else "No quizzes available" if latest_quiz else "No quizzes available" if latest_quiz else "No quizzes available" if latest_quiz else "No quizzes available" if latest_quiz else "No quizzes available" if latest_quiz else "No quizzes available" if latest_quiz else "No quizzes available",
         }
     return render(request, "home.html", context)
 
@@ -61,10 +81,8 @@ def get_paper_quizzes(request):
             quiz = Quiz.objects.create(title=f"Білет #{random_number}", category=category, is_random=True)
             quizzes = Quiz.objects.filter(category__in=[category])
             questions = Question.objects.filter(quiz_questions__quiz__in=quizzes)
-
             count = 20 if questions.count() > 20 else questions.count()
             random_questions = questions.order_by('?')[:count] 
-            print(count)
             for question in random_questions:
                 QuizzesQuestions.objects.create(quiz=quiz, question=question)
             return redirect("get_quiz", quiz.pk)
@@ -99,6 +117,7 @@ def choose_quiz_category(request):
 @custom_login_required
 def get_quiz(request, pk):
     quiz = Quiz.objects.get(pk=pk)
+    print(quiz)
     user_quiz = UsersQuizzes.objects.create(user=request.user, quiz=quiz)
     user_quiz.save()
     return render(request, "quizzes/get_quiz.html", {'quiz': quiz, 'title': f'Тест ПДР: {quiz.title}'})

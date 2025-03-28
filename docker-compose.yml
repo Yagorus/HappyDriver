@@ -1,0 +1,40 @@
+version: '3.8'
+
+services:
+  web:
+    build:
+      context: .
+    restart: always
+    depends_on:
+      - db
+    environment:
+      - DJANGO_SETTINGS_MODULE=app.settings
+      - DATABASE_HOST=db
+      - DATABASE_NAME=happy_driver
+      - DATABASE_USER=admn
+      - DATABASE_PASSWORD=admn
+      - DATABASE_PORT=5432
+      - STATIC_ROOT=/app/staticfiles
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/app
+      - static_volume:/app/staticfiles
+      - media_volume:/app/media
+
+  db:
+    image: postgres:14
+    restart: always
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    environment:
+      - POSTGRES_DB=happy_driver
+      - POSTGRES_USER=admn
+      - POSTGRES_PASSWORD=admn
+    ports:
+      - "5432:5432"
+
+volumes:
+  postgres_data:
+  static_volume:
+  media_volume:

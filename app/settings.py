@@ -15,7 +15,9 @@ from pathlib import Path
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
+STATIC_ROOT = os.environ.get('STATIC_ROOT', os.path.join(BASE_DIR, 'staticfiles'))
+STATIC_URL = '/static/'
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
@@ -25,7 +27,7 @@ SECRET_KEY = "django-insecure-p4ut3vvjp_tf&$bx@*ppx^4d^rxcby4y!js@03c1@po&o8el@e
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', '147.185.221.26', '*']
 
 
 # Application definition
@@ -43,6 +45,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -79,13 +82,13 @@ WSGI_APPLICATION = 'app.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'happy_driver',  
-        'USER': 'admn', 
-        'PASSWORD': 'admn',
-        'HOST': 'localhost',    
-        'PORT': '5432',    
+        'NAME': os.environ.get('DATABASE_NAME', 'happy_driver'),
+        'USER': os.environ.get('DATABASE_USER', 'admn'),
+        'PASSWORD': os.environ.get('DATABASE_PASSWORD', 'admn'),
+        'HOST': os.environ.get('DATABASE_HOST', 'localhost'),
+        'PORT': os.environ.get('DATABASE_PORT', '5432'),
     }
-}  
+}
 
 
 # Password validation
@@ -118,7 +121,7 @@ USE_I18N = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
 STATICFILES_DIRS = [BASE_DIR / "static"]
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
@@ -129,4 +132,173 @@ MEDIA_URL = '/media/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 TIME_ZONE = 'Europe/Kiev'
-USE_TZ = True
+USE_TZ = TrueSTATIC_ROOT = '/app/staticfiles'
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+# Static files settings
+import os
+STATIC_ROOT = '/app/staticfiles'
+STATIC_URL = '/static/'
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+
+
+# Static files settings
+import os
+STATIC_ROOT = '/app/staticfiles'
+STATIC_URL = '/static/'
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+
+
+# Static files settings
+import os
+STATIC_ROOT = '/app/staticfiles'
+STATIC_URL = '/static/'
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+
+
+# Static files settings
+import os
+STATIC_ROOT = '/app/staticfiles'
+STATIC_URL = '/static/'
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+
+
+# Static files settings
+import os
+STATIC_ROOT = '/app/staticfiles'
+STATIC_URL = '/static/'
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+
+
+# Static files settings
+import os
+STATIC_ROOT = '/app/staticfiles'
+STATIC_URL = '/static/'
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+
+
+# Static files settings
+import os
+STATIC_ROOT = '/app/staticfiles'
+STATIC_URL = '/static/'
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+
+
+# Static files settings
+import os
+STATIC_ROOT = '/app/staticfiles'
+STATIC_URL = '/static/'
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+
+
+# Static files settings
+import os
+STATIC_ROOT = '/app/staticfiles'
+STATIC_URL = '/static/'
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+
+
+# Static files settings
+import os
+STATIC_ROOT = '/app/staticfiles'
+STATIC_URL = '/static/'
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+
+
+# Static files settings
+import os
+STATIC_ROOT = '/app/staticfiles'
+STATIC_URL = '/static/'
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+
+
+# Static files settings
+import os
+STATIC_ROOT = '/app/staticfiles'
+STATIC_URL = '/static/'
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+
+
+# Static files settings
+import os
+STATIC_ROOT = '/app/staticfiles'
+STATIC_URL = '/static/'
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+
+
+# Static files settings
+import os
+STATIC_ROOT = '/app/staticfiles'
+STATIC_URL = '/static/'
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+
+
+# Static files settings
+import os
+STATIC_ROOT = '/app/staticfiles'
+STATIC_URL = '/static/'
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+
+
+# Static files settings
+import os
+STATIC_ROOT = '/app/staticfiles'
+STATIC_URL = '/static/'
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+
+
+# Static files settings
+import os
+STATIC_ROOT = '/app/staticfiles'
+STATIC_URL = '/static/'
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+
+
+# Static files settings
+import os
+STATIC_ROOT = '/app/staticfiles'
+STATIC_URL = '/static/'
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+
+
+# Static files settings
+import os
+STATIC_ROOT = '/app/staticfiles'
+STATIC_URL = '/static/'
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+
+
+# Static files settings
+import os
+STATIC_ROOT = '/app/staticfiles'
+STATIC_URL = '/static/'
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+
+
+# Static files settings
+import os
+STATIC_ROOT = '/app/staticfiles'
+STATIC_URL = '/static/'
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+
+
+# Static files settings
+import os
+STATIC_ROOT = '/app/staticfiles'
+STATIC_URL = '/static/'
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+
+
+# Static files settings
+import os
+STATIC_ROOT = '/app/staticfiles'
+STATIC_URL = '/static/'
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+
+
+# Static files settings
+import os
+STATIC_ROOT = '/app/staticfiles'
+STATIC_URL = '/static/'
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+
