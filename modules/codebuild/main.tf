@@ -15,14 +15,10 @@ resource "aws_codebuild_project" "project" {
     type = "NO_ARTIFACTS"
 }
 
-# https://docs.aws.amazon.com/codebuild/latest/userguide/build-env-ref-compute-types.html
-# https://docs.aws.amazon.com/codebuild/latest/userguide/build-env-ref-available.html
-
   environment {
-    compute_type = "BUILD_GENERAL1_SMALL" # 7 GB memory
+    compute_type = "BUILD_GENERAL1_SMALL" 
     image = "aws/codebuild/standard:4.0"
     type = "LINUX_CONTAINER"
-    # The privileged flag must be set so that your project has the required Docker permissions
     privileged_mode = true
 
     environment_variable {
