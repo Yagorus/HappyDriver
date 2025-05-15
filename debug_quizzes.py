@@ -4,8 +4,8 @@ import django
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'app.settings')
 django.setup()
 
-from quizzes.models import Quiz, Question, Answer, Category, Topic, Paper
-from django.contrib.auth.models import User
+from quizzes.models import Quiz, Question, Answer, QuizzesQuestions
+from accounts.models import CustomUser
 from django.utils import timezone
 import sys
 
@@ -22,47 +22,23 @@ def debug_quizzes():
     if quizzes.count() == 0:
         print("No quizzes found. Creating a sample quiz...")
         
-        # Create categories if none exist
-        if Category.objects.count() == 0:
-            print("Creating sample category...")
-            category = Category.objects.create(name="Sample Category")
-        else:
-            category = Category.objects.first()
-            print(f"Using existing category: {category.name}")
-        
-        # Create topics if none exist
-        if Topic.objects.count() == 0:
-            print("Creating sample topic...")
-            topic = Topic.objects.create(name="Sample Topic", category=category)
-        else:
-            topic = Topic.objects.first()
-            print(f"Using existing topic: {topic.name}")
-        
-        # Create papers if none exist
-        if Paper.objects.count() == 0:
-            print("Creating sample paper...")
-            paper = Paper.objects.create(name="Sample Paper")
-        else:
-            paper = Paper.objects.first()
-            print(f"Using existing paper: {paper.name}")
-        
         # Create a quiz
         print("Creating sample quiz...")
         quiz = Quiz.objects.create(
             title="Sample Quiz",
-            description="This is a sample quiz for debugging",
-            topic=topic,
-            paper=paper,
-            created_at=timezone.now()
+            category="B",
+            is_random=False
         )
         
         # Create a question
         print("Creating sample question...")
         question = Question.objects.create(
-            quiz=quiz,
             text="This is a sample question",
-            image_url="/static/img/logo.jpg"
+            explanation="This is an explanation",
         )
+        
+        # Link the question to the quiz
+        QuizzesQuestions.objects.create(quiz=quiz, question=question)
         
         # Create answers
         print("Creating sample answers...")
@@ -75,14 +51,14 @@ def debug_quizzes():
         print("Existing quizzes:")
         for quiz in quizzes:
             print(f"  - {quiz.id}: {quiz.title} (created: {quiz.created_at})")
-            print(f"    Description: {quiz.description}")
-            print(f"    Topic: {quiz.topic.name if quiz.topic else 'None'}")
-            print(f"    Paper: {quiz.paper.name if quiz.paper else 'None'}")
+            print(f"    Category: {quiz.category}")
+            print(f"    Is Random: {quiz.is_random}")
             
             # Check questions
-            questions = Question.objects.filter(quiz=quiz)
-            print(f"    Questions: {questions.count()}")
-            for question in questions:
+            quiz_questions = QuizzesQuestions.objects.filter(quiz=quiz)
+            print(f"    Questions: {quiz_questions.count()}")
+            for quiz_question in quiz_questions:
+                question = quiz_question.question
                 print(f"      - {question.id}: {question.text}")
                 
                 # Check answers
