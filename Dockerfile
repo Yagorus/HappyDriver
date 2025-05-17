@@ -15,8 +15,11 @@ ENV DATABASE_PORT=5432
 # Set work directory
 WORKDIR /app
 
+# Copy requirements file
+COPY requirements.txt /app/
+
 # Install dependencies
-RUN pip install --no-cache-dir Django==5.1.5 pillow==11.1.0 gunicorn==21.2.0 psycopg2-binary==2.9.9 requests python-dotenv whitenoise
+RUN pip install --no-cache-dir -r requirements.txt
 
 # Install PostgreSQL client
 RUN apt-get update && apt-get install -y postgresql-client libpq-dev && \
