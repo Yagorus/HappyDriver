@@ -316,3 +316,94 @@ STATIC_ROOT = '/app/staticfiles'
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 
+
+# Static files settings
+import os
+STATIC_ROOT = '/app/staticfiles'
+STATIC_URL = '/static/'
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+
+
+# Static files settings
+import os
+STATIC_ROOT = '/app/staticfiles'
+STATIC_URL = '/static/'
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+
+
+# Static files settings
+import os
+STATIC_ROOT = '/app/staticfiles'
+STATIC_URL = '/static/'
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+
+
+# Static files settings
+import os
+STATIC_ROOT = '/app/staticfiles'
+STATIC_URL = '/static/'
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+
+
+# Static files settings
+import os
+STATIC_ROOT = '/app/staticfiles'
+STATIC_URL = '/static/'
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+
+
+# Static files settings
+import os
+STATIC_ROOT = '/app/staticfiles'
+STATIC_URL = '/static/'
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+
+
+# Static files settings
+import os
+STATIC_ROOT = '/app/staticfiles'
+STATIC_URL = '/static/'
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+
+
+# Static files settings
+import os
+STATIC_ROOT = '/app/staticfiles'
+STATIC_URL = '/static/'
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+
+
+# Static files settings
+import os
+STATIC_ROOT = '/app/staticfiles'
+STATIC_URL = '/static/'
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+
+
+# Static files settings
+import os
+STATIC_ROOT = '/app/staticfiles'
+STATIC_URL = '/static/'
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+
+
+# Static files settings
+import os
+STATIC_ROOT = '/app/staticfiles'
+STATIC_URL = '/static/'
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+
+
+# Static files settings
+import os
+STATIC_ROOT = '/app/staticfiles'
+STATIC_URL = '/static/'
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+
+
+# Static files settings
+import os
+STATIC_ROOT = '/app/staticfiles'
+STATIC_URL = '/static/'
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+
